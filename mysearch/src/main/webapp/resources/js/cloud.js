@@ -1,7 +1,7 @@
 var fill = d3.scale.category20b();
 
 var w = 960,
-    h = 600;
+    h = 300;
 
 var words = [],
     max,
@@ -11,7 +11,7 @@ var words = [],
     tags,
     fontSize,
     maxLength = 30,
-    fetcher = "http://search.twitter.com/search.json?rpp=100&q={word}",
+    fetcher = "http://ec2-54-249-102-156.ap-northeast-1.compute.amazonaws.com:8983/solr/collection1/select?q={keyword}&wt=json&indent=true",
     statusText = d3.select("#status");
 
 var layout = d3.layout.cloud()
@@ -29,15 +29,16 @@ var svg = d3.select("#vis").append("svg")
 var background = svg.append("g"),
     vis = svg.append("g")
     .attr("transform", "translate(" + [w >> 1, h >> 1] + ")");
-
+/*
 d3.select("#download-svg").on("click", downloadSVG);
 d3.select("#download-png").on("click", downloadPNG);
+*/
 
 var tabs = d3.select("#presets").selectAll("a")
     .data([
-      {fetcher: "http://search.twitter.com/search.json?rpp=100&q={word}", name: "Twitter"},
-      {fetcher: "http://api.twitter.com/1/statuses/user_timeline.json?screen_name={word}&count=200&trim_user=1", name: "Tweeps"},
-      {fetcher: "http://en.wikipedia.org/wiki/{word}", name: "Wikipedia"},
+      {fetcher: "http://search.twitter.com/search.json?rpp=100&q={keyword}", name: "Twitter"},
+      //{fetcher: "http://api.twitter.com/1/statuses/user_timeline.json?screen_name={keyword}&count=200&trim_user=1", name: "Tweeps"},
+      //{fetcher: "http://en.wikipedia.org/wiki/{keyword}", name: "Wikipedia"},
       {fetcher: "", name: "Custom", id: "custom"}
     ])
   .enter().append("a")
@@ -55,6 +56,7 @@ var tabs = d3.select("#presets").selectAll("a")
       d3.select("#custom-area").style("display", d.id ? null : "none");
       d3.event.preventDefault();
     });
+
 d3.select(window).on("hashchange", hashchange);
 d3.select(window)
     .on("load", hashchange)
@@ -99,20 +101,21 @@ function parseHTML(d) {
 }
 
 function getURL(url, word, callback) {
-  url = url.replace("{word}", encodeURIComponent(word))
+  url = url.replace("{keyword}", encodeURIComponent(word))
   statusText.text("Fetching… ");
 
-  if (matchTwitter.test(url)) {
+  //if (matchTwitter.test(url)) {
     var iframe = d3.select("body").append("iframe").style("display", "none");
     d3.select(window).on("message", function() {
       var json = JSON.parse(d3.event.data);
       callback((Array.isArray(json) ? json : json.results).map(function(d) { return d.text; }).join("\n\n"));
       iframe.remove();
     });
-    iframe.attr("src", "http://jsonp.jasondavies.com/?" + encodeURIComponent(url));
+    //iframe.attr("src", "jsonp?" + encodeURIComponent(url));
+    iframe.attr("src", url);
     return;
-  }
-
+ // }
+/*
   try {
     d3.text(url, function(text) {
       if (text == null) proxy(url, callback);
@@ -121,12 +124,13 @@ function getURL(url, word, callback) {
   } catch(e) {
     proxy(url, callback);
   }
+  */
 }
-
+/*
 function proxy(url, callback) {
   d3.text("//www.jasondavies.com/xhr?url=" + encodeURIComponent(url), callback);
 }
-
+*/
 function flatten(o, k) {
   if (typeof o === "string") return o;
   var text = [];
@@ -212,7 +216,7 @@ function draw(data, bounds) {
       .duration(750)
       .attr("transform", "translate(" + [w >> 1, h >> 1] + ")scale(" + scale + ")");
 }
-
+/*
 // Converts a given word cloud to image/png.
 function downloadPNG() {
   var canvas = document.createElement("canvas"),
@@ -240,7 +244,7 @@ function downloadSVG() {
        .attr("xmlns", "http://www.w3.org/2000/svg")
      .node().parentNode.innerHTML))));
 }
-
+*/
 function hashchange() {
   var h = location.hash;
   if (h && h.length > 1) {
@@ -315,7 +319,7 @@ d3.select("#random-palette").on("click", function() {
       arc = d3.svg.arc()
         .innerRadius(0)
         .outerRadius(r);
-
+/*
   d3.selectAll("#angle-count, #angle-from, #angle-to")
       .on("change", getAngles)
       .on("mouseup", getAngles);
@@ -381,7 +385,7 @@ d3.select("#random-palette").on("click", function() {
     d3.select("#angle-from").property("value", from);
     d3.select("#angle-to").property("value", to);
   }
-
+*/
   function cross(a, b) { return a[0] * b[1] - a[1] * b[0]; }
   function dot(a, b) { return a[0] * b[0] + a[1] * b[1]; }
 })();

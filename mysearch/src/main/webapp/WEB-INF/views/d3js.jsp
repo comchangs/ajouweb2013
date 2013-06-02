@@ -5,11 +5,13 @@
 <%@ page session="false" %>
 
 <html>
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Word Cloud Generator</title>
 
 <link href="${pageContext.request.contextPath}/resources/css/cloud.css" rel="stylesheet">
 <link rel="image_src" href="${pageContext.request.contextPath}/resources/images/amazing.png">
+</head>
 
 <div id="vis"></div>
 
