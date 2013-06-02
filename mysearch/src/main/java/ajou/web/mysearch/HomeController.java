@@ -36,4 +36,11 @@ public class HomeController {
 		return "home";
 	}
 	
+	@RequestMapping(value = "/wordcloud", method = RequestMethod.GET)
+	public String wordcloud(Locale locale, Model model) {
+		logger.info("Word Cloud!", locale);
+
+		return "d3js";
+	}
+	
 }
