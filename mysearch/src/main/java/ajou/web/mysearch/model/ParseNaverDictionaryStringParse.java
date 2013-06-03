@@ -107,7 +107,10 @@ public class ParseNaverDictionaryStringParse {
 	protected void insertRelationKeywordArray()
 	{
 		for(int i = 0; i < resultArray.size(); i++)
-			relationWord.add(new String(resultArray.get(i)));
+		{
+			if(!resultArray.get(i).equals(keyword))
+				relationWord.add(new String(resultArray.get(i)));
+		}
 	}
 	
 	public void stringSearchMeta(StringBuffer meta)

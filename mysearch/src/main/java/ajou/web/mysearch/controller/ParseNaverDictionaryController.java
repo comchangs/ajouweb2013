@@ -69,6 +69,16 @@ public class ParseNaverDictionaryController {
 			}
 		}
 		
+		//document.put("keyword", keyword);
+		//document.put("relation_keyword", relationWord.get(i));
+		/*
+		 * 
+SELECT keyword, relation_keyword, count(*) as count
+FROM relation_keyword
+GROUP BY relation_keyword
+order by count desc
+		 * */
+		
 		return "";
 	}
 }
