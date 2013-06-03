@@ -63,4 +63,10 @@ public class HomeController {
 		return "relation_keyword";
 	}
 	
+	@RequestMapping(value ="/parseurl", method = RequestMethod.GET)
+	public String parseurl(Locale locale, Model model) {
+		logger.info("Parse Html", locale);
+		
+		return "inputUrlTest";
+	}
 }
