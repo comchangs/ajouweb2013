@@ -12,12 +12,12 @@ public class SpringMongoConfig extends AbstractMongoConfiguration {
  
 	@Override
 	public String getDatabaseName() {
-		return "yourdb";
+		return "keyword";
 	}
  
 	@Override
 	@Bean
 	public Mongo mongo() throws Exception {
-		return new MongoClient("127.0.0.1");
+		return new MongoClient("ec2-54-249-102-156.ap-northeast-1.compute.amazonaws.com");
 	}
 }
