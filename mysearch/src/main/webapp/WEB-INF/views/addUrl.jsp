@@ -4,21 +4,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-	Title:<br />
+	Search Keyword: ${command.searchKeyword}
+	<br />
+	<br /> Title:<br />
 	<c:forEach var="t" items="${command.title}">
 	${t}<br />
-	</c:forEach><br />
-	Description:<br />
+	</c:forEach>
+	<br /> Description:
+	<br />
 	<c:forEach var="d" items="${command.description}">
 	${d}<br />
-	</c:forEach><br />
-	Keywords:<br />
+	</c:forEach>
+	<br /> Keywords:
+	<br />
 	<c:forEach var="k" items="${command.keywords}">
 	${k}<br />
-	</c:forEach>
+	</c:forEach><br />
+	<a href="../mysearch/parseurl">input again</a>
 </body>
 </html>

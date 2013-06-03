@@ -1,14 +1,30 @@
 package ajou.web.mysearch.model;
 
 public class ParseHtml {
+	String searchKeyword;
 	String[] title;
 	String[] description;
 	String[] keywords;
 
-	public ParseHtml(String[] title, String[] description, String[] keywords) {
+	public ParseHtml(String searchKeyword, String[] title, String[] description, String[] keywords) {
+		this.searchKeyword = searchKeyword;
 		this.title = title;
 		this.description = description;
 		this.keywords = keywords;
+	}
+
+	/**
+	 * @return the searchKeyword
+	 */
+	public String getSearchKeyword() {
+		return searchKeyword;
+	}
+
+	/**
+	 * @param searchKeyword the searchKeyword to set
+	 */
+	public void setSearchKeyword(String searchKeyword) {
+		this.searchKeyword = searchKeyword;
 	}
 
 	/**
