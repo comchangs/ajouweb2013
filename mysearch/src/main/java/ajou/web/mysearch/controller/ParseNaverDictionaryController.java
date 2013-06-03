@@ -69,6 +69,6 @@ public class ParseNaverDictionaryController {
 			}
 		}
 		
-		return "parseNaverDictionary";
+		return "";
 	}
 }
