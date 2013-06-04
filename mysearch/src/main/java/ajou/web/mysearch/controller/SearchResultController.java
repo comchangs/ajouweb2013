@@ -102,6 +102,7 @@ public class SearchResultController {
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("resultList", resultList);
 		mv.addObject("searchKeyword", searchKeyword);
+		mv.addObject("start", start);
 		mv.setViewName("SearchResult");
 		
 		return mv;

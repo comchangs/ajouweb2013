@@ -24,5 +24,9 @@
 			<br />
 		</c:forEach>
 	</div>
+	<div id="DivNext">
+		
+	</div>
 </body>
+<script src="${pageContext.request.contextPath}/resources/js/SearchResult.js"></script>
 </html>
