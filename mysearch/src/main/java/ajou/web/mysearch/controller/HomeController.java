@@ -111,4 +111,11 @@ public class HomeController {
 		
 		return "inputUrlTest";
 	}
+	
+	@RequestMapping(value ="/showweather", method = RequestMethod.GET)
+	public String showweather(Locale locale, Model model) {
+		logger.info("Show weather", locale);
+		
+		return "showWeather";
+	}
 }
