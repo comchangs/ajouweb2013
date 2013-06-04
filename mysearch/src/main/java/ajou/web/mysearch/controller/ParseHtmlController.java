@@ -2,6 +2,9 @@ package ajou.web.mysearch.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
@@ -64,19 +67,24 @@ public class ParseHtmlController {
 		ApplicationContext ctx = new GenericXmlApplicationContext("SpringConfig.xml");
 		MongoOperations mongoOperation = (MongoOperations) ctx.getBean("mongoTemplate");
 		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+		String[] utcTime = sdf.format(new Date()).split(" ");
+		String timestamp = utcTime[0]+"T"+utcTime[1]+"Z";
+		
 		for(int i = 0; i < titleArray.length; i++) {
-			Keywords keywords = new Keywords(searchKeyword, titleArray[i]);
+			Keywords keywords = new Keywords(searchKeyword, titleArray[i], timestamp);
 			mongoOperation.insert(keywords);
 		}
 		if(descriptionArray != null) {
 			for(int i = 0; i < descriptionArray.length; i++) {
-				Keywords keywords = new Keywords(searchKeyword, descriptionArray[i]);
+				Keywords keywords = new Keywords(searchKeyword, descriptionArray[i], timestamp);
 				mongoOperation.insert(keywords);
 			}
 		}
 		if(keywordArray != null) {
 			for(int i = 0; i < keywordArray.length; i++) {
-				Keywords keywords = new Keywords(searchKeyword, keywordArray[i]);
+				Keywords keywords = new Keywords(searchKeyword, keywordArray[i], timestamp);
 				mongoOperation.insert(keywords);
 			}
 		}

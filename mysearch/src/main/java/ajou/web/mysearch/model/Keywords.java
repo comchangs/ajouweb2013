@@ -10,6 +10,7 @@ public class Keywords {
 	private String id;
 	private String search_keyword;
 	private String relation_keyword;
+	private String timestamp;
 
 	/*
 	 * (non-Javadoc)
@@ -25,9 +26,10 @@ public class Keywords {
 	public Keywords() {
 	}
 	
-	public Keywords(String search_keyword, String relation_keyword) {
+	public Keywords(String search_keyword, String relation_keyword, String timestamp) {
 		this.search_keyword = search_keyword;
 		this.relation_keyword = relation_keyword;
+		this.timestamp = timestamp;
 	}
 
 	/**
@@ -73,5 +75,13 @@ public class Keywords {
 	 */
 	public void setRelation_keyword(String relation_keyword) {
 		this.relation_keyword = relation_keyword;
+	}
+
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
 	}
 }
