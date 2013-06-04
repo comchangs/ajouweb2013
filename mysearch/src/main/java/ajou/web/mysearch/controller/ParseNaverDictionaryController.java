@@ -6,15 +6,18 @@ import java.net.URLEncoder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import ajou.web.mysearch.model.ParseNaverDictionaryDB;
 import ajou.web.mysearch.model.ParseNaverDictionaryNaverParse;
 import ajou.web.mysearch.model.ParseNaverDictionaryStringParse;
 import ajou.web.mysearch.model.ParseNaverDictionaryUrlParse;
 
+@Controller
 public class ParseNaverDictionaryController {
 	private MongoOperations mongoOperation;
 	private ParseNaverDictionaryDB userDataMan;

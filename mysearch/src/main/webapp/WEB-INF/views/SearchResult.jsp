@@ -10,7 +10,7 @@
 <body>
 	<div id="DivSearch">
 		<form method="post" action="SearchResult">
-			Search String :<input type="text" name="searchKeyword" />
+			Search String :<input type="text" name="searchKeyword" value="${searchKeyword }" />
 			<input type="submit" value="Search"/>
 		</form>
 	</div>
@@ -19,8 +19,9 @@
 			<div id="DivResultList">
 				<a href="${result.url }">${result.title }</a><br />
 				${result.content }<br />
-				${result.url }
+				<a href="${result.url }">${result.url }</a>
 			</div>
+			<br />
 		</c:forEach>
 	</div>
 </body>
