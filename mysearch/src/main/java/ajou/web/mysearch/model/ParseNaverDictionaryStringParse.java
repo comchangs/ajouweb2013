@@ -1,6 +1,8 @@
 package ajou.web.mysearch.model;
 
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import org.springframework.data.mongodb.core.MongoOperations;
 
@@ -36,10 +38,14 @@ public class ParseNaverDictionaryStringParse {
 		if(relationWord != null)
 			for(int i = 0; i < relationWord.size(); i ++)
 			{
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+				String[] utcTime = sdf.format(new Date()).split(" ");
 				BasicDBObject document = new BasicDBObject();
 //				document.put("id", ????);
 				document.put("keyword", keyword);
 				document.put("relation_keyword", relationWord.get(i));
+				document.put("timestamp", utcTime[0]+"T"+utcTime[1]+"Z");
 				mongoOperation.save(document);
 			}
 	}
