@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<form method="post" action="SearchResult">
+	<form method="get" action="SearchResult">
 		Search String :<input type="text" name="searchKeyword" />
 		<input type="submit" value="Search"/>
 	</form>

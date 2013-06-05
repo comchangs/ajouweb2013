@@ -15,15 +15,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 
 import ajou.web.mysearch.model.SearchResult;
 
 @Controller
 public class SearchResultController {
-
-	@RequestMapping(value = "/SearchResult", method = RequestMethod.POST)
+	
+	@RequestMapping(value = "/SearchResult", method = RequestMethod.GET)
 	public ModelAndView SearchResult(
 			@RequestParam(value = "searchKeyword", defaultValue = "") String searchKeyword,
 			@RequestParam(value = "start", defaultValue = "0") String start) {
@@ -43,6 +42,8 @@ public class SearchResultController {
 
 		URL url = null;
 		SearchResult[] resultList = new SearchResult[10];
+		int numFound = 0;
+		
 		try {//
 			url = new URL(
 					"http://ec2-54-249-102-156.ap-northeast-1.compute.amazonaws.com:8983/solr/collection1/select?q="
@@ -55,11 +56,11 @@ public class SearchResultController {
 					.parse(new InputStreamReader(url.openConnection()
 							.getInputStream(), "UTF-8"));
 
-			// int numFound = (int) searchResult.get("numFound");
 			JSONObject responseObject = (JSONObject) searchResult.get("response");
-			JSONArray resultArray = (JSONArray) responseObject.get("docs");
+			numFound = Integer.parseInt(responseObject.get("numFound").toString());
 			
-			if (!resultArray.isEmpty()) {
+			if (numFound != 0) {
+				JSONArray resultArray = (JSONArray) responseObject.get("docs");
 				for (int i = 0; i < resultArray.size(); i++) {
 					JSONObject resultBuff = (JSONObject) resultArray.get(i);
 					resultList[i] = new SearchResult();
@@ -103,6 +104,7 @@ public class SearchResultController {
 		mv.addObject("resultList", resultList);
 		mv.addObject("searchKeyword", searchKeyword);
 		mv.addObject("start", start);
+		mv.addObject("numFound", numFound);
 		mv.setViewName("SearchResult");
 		
 		return mv;
