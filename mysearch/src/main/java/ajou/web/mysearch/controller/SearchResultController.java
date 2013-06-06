@@ -23,7 +23,7 @@ import ajou.web.mysearch.model.MySqlConnection;
 @Controller
 public class SearchResultController {
 	
-	private String key = "";
+/*	private String key = "";
 	private int sta;
 	private int numF;
 	
@@ -37,7 +37,7 @@ public class SearchResultController {
 		json.put("numFound", numF);
 		
 		return json;
-	}
+	}*/
 	
 	
 	@RequestMapping(value = "/SearchResult", method = RequestMethod.GET)
@@ -52,9 +52,11 @@ public class SearchResultController {
 		 * request.getParameter("start");
 		 */
 		int startNum = Integer.parseInt(start);
+		String searchKeywordNotEncode = "";
 
 		try {
-			searchKeyword = URLEncoder.encode(searchKeyword, "UTF-8");
+			searchKeywordNotEncode = new String(searchKeyword.getBytes("8859_1"),"UTF-8");
+			searchKeyword = URLEncoder.encode(searchKeywordNotEncode, "UTF-8");
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
@@ -64,9 +66,11 @@ public class SearchResultController {
 		SearchResult[] resultList = new SearchResult[10];
 		int numFound = 0;
 		MySqlConnection mySqlCon = null;
-		ParseNaverDictionaryController naver = new ParseNaverDictionaryController();
 		
-		naver.parseNaverDictionary(searchKeyword);
+/*		ParseNaverDictionaryController naver = new ParseNaverDictionaryController();
+		naver.parseNaverDictionary(searchKeywordNotEncode); 이렇게 두면 페이지 바뀔때마다 돈다..*/
+		
+		
 		/*
 		if(bookmarkSelect.equals("add"))
 			mySqlCon.insertDB("INSERT user_bookmark ..." + bookmarkUrl);
@@ -76,7 +80,9 @@ public class SearchResultController {
 		try {//
 			url = new URL(
 					"http://ec2-54-249-102-156.ap-northeast-1.compute.amazonaws.com:8983/solr/collection1/select?q="
+							+ "*"
 							+ searchKeyword
+							+ "*"
 							+ "&start="
 							+ startNum
 							+ "&wt=json&indent=true");
@@ -143,7 +149,7 @@ public class SearchResultController {
 
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("resultList", resultList);
-		mv.addObject("searchKeyword", searchKeyword);
+		mv.addObject("searchKeyword", searchKeywordNotEncode);
 		mv.addObject("start", start);
 		mv.addObject("numFound", numFound);
 		
