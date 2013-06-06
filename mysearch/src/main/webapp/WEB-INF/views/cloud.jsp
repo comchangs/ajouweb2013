@@ -13,26 +13,32 @@
 </head>
 <body>
 <script>
+	var data = ${json_data};
 	var w = 960,
 		h = 300;
-	
+	var r = 40.5,
+		d = 90;
 	var fill = d3.scale.category20();
 
   
   d3.layout.cloud()
   .timeInterval(10)
   .size([w, h])
-      .words(${json_data}.map(function(d) {
+      .words(data.map(function(d) {
         return {text: d.relation_keyword, size: 20 + d.count * 5};
       }))
-      .rotate(function() { return ~~(Math.random() * 2) * 60; })
+      .rotate(function() { return ~~(Math.random() * 6) * 60 * (Math.random()*6); })
       .font("Impact")
       .fontSize(function(d) { return d.size; })
       .on("end", draw)
       .start();
-
+  
   function draw(words) {
-	  var text = vis.selectAll("text")
+	  var text = d3.select("#vis").append("svg")
+	  .attr("width", w)
+        .attr("height", h)
+      .append("g")
+        .attr("transform", "translate(" + [w >> 1, h >> 1] + ")").selectAll("text")
       .data(words, function(d) { return d.text.toLowerCase(); });
   text.transition()
       .duration(1000)
@@ -52,39 +58,11 @@
   text.style("font-family", function(d) { return d.font; })
       .style("fill", function(d) { return fill(d.text.toLowerCase()); })
       .text(function(d) { return d.text; });
-  var exitGroup = background.append("g")
-      .attr("transform", vis.attr("transform"));
-  var exitGroupNode = exitGroup.node();
-  text.exit().each(function() {
-    exitGroupNode.appendChild(this);
-  });
-  exitGroup.transition()
-      .duration(1000)
-      .style("opacity", 1e-6)
-      .remove();
-  vis.transition()
-      .delay(1000)
-      .duration(750)
-      .attr("transform", "translate(" + [w >> 1, h >> 1] + ")scale(" + scale + ")");
-	  /*
-    d3.select("#vis").append("svg")
-        .attr("width", w)
-        .attr("height", h)
-      .append("g")
-        .attr("transform", "translate(" + [w >> 1, h >> 1] + ")")
-      .selectAll("text")
-        .data(words)
-      .enter().append("text")
-        .style("font-size", function(d) { return d.size + "px"; })
-        .style("font-family", "Impact")
-        .style("fill", function(d, i) { return fill(i); })
-        .attr("text-anchor", "middle")
-        .attr("transform", function(d) {
-          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
-        })
-        .text(function(d) { return d.text; });
-	  */
   }
+  
+  function load(d) {
+	  window.location.href = '?keyword='+d;
+	}
 </script>
 <div id="vis"></div>
 </body>
