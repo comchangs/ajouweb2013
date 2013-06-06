@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import ajou.web.mysearch.model.ParseNaverDictionaryDB;
+import ajou.web.mysearch.model.MySqlConnection;
 import ajou.web.mysearch.model.ParseNaverDictionaryNaverParse;
 import ajou.web.mysearch.model.ParseNaverDictionaryStringParse;
 import ajou.web.mysearch.model.ParseNaverDictionaryUrlParse;
@@ -20,7 +20,7 @@ import ajou.web.mysearch.model.ParseNaverDictionaryUrlParse;
 @Controller
 public class ParseNaverDictionaryController {
 	private MongoOperations mongoOperation;
-	private ParseNaverDictionaryDB userDataMan;
+	private MySqlConnection userDataMan;
 	private String naverKey;
 	private ParseNaverDictionaryUrlParse urlParse;
 	private ParseNaverDictionaryNaverParse naver;
@@ -33,16 +33,6 @@ public class ParseNaverDictionaryController {
 		naverKey = "09eb9f1c30c96d9e1fcae581b0a16325";
 		
 		stringParse = new ParseNaverDictionaryStringParse();
-		
-		userDataMan = new ParseNaverDictionaryDB();
-		userDataMan.setDbUrl("jdbc:mysql://localhost:3306/nutch?useUnicode=true&amp;characterEncoding=UTF-8");
-		userDataMan.setDbUser("root");
-		userDataMan.setDbPass("webclass");
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		
 		ApplicationContext ctx = new GenericXmlApplicationContext("SpringConfig.xml");
 		mongoOperation = (MongoOperations)ctx.getBean("mongoTemplate");

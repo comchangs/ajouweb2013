@@ -8,38 +8,50 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class ParseNaverDictionaryDB {
+public class MySqlConnection {
 	private String dburl = "";
 	private String dbuser = "";
 	private String dbpass = "";
 	
-	public void setDbUrl(String url) {
+	public MySqlConnection()
+	{
+		this.setDbUrl("jdbc:mysql://ec2-54-249-102-156.ap-northeast-1.compute.amazonaws.com:3306/nutch?useUnicode=true&amp;characterEncoding=UTF-8");
+		this.setDbUser("webclass");
+		this.setDbPass("webclass");
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		/**
+		 * Function for opening connection to the database
+		 */
+	}
+	
+	private void setDbUrl(String url) {
 		dburl = url;
 	}
 	
-	public String getDbUrl() {
+	private String getDbUrl() {
 		return dburl;
 	}
 	
-	public void setDbUser(String user) {
+	private void setDbUser(String user) {
 		dbuser = user;
 	}
 	
-	public String getDbUser() {
+	private String getDbUser() {
 		return dbuser;
 	}
 	
-	public void setDbPass(String pass) {
+	private void setDbPass(String pass) {
 		dbpass = pass;
 	}
 	
-	public String getDbPass () {
+	private String getDbPass () {
 		return dbpass;
 	}
-	
-	/**
-	 * Function for opening connection to the database
-	 */
+
 	public Connection getConnection() {
 		
 		Connection conn = null;

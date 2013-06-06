@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.MongoOperations;
 
 import com.mongodb.BasicDBObject;
 
-import ajou.web.mysearch.model.ParseNaverDictionaryDB;
+import ajou.web.mysearch.model.MySqlConnection;
 
 public class ParseNaverDictionaryStringParse {
 	
@@ -18,10 +18,10 @@ public class ParseNaverDictionaryStringParse {
 	private ArrayList<String> resultArray;
 	private String buff;
 	private String DBDictionary;
-	private ParseNaverDictionaryDB userDataMan;
+	private MySqlConnection userDataMan;
 	private MongoOperations mongoOperation;
 	
-	public void initStringParse(String keyword, ParseNaverDictionaryDB userDataMan, MongoOperations mongoOperation)
+	public void initStringParse(String keyword, MySqlConnection userDataMan, MongoOperations mongoOperation)
 	{
 		this.keyword = keyword;
 		this.userDataMan = userDataMan;
