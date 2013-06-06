@@ -1,4 +1,4 @@
-		$(document).ready(function() {
+/*		$(document).ready(function() {
 			if("${numFound }" > 1)
 				$("#DivPaging").paginate({
 					count 		: Math.ceil("${numFound }"/10),
@@ -19,4 +19,28 @@
 												$(location).attr('href', url); 
 											  }
 			});
+			$('#listview img').click(function(){ 
+				var img=$(this).attr("src");
+				if(img =="imagename"){
+					// Text you want
+					}
+				if(img =="otherimage"){
+					// Text you want
+					}
+				});
+			$.ajax({
+		        url: '/GetResultJsonData',
+		        type: 'POST',
+		        dataType: 'json',
+		        contentType: "application/json; charset=utf-8",
+		        success: function (result) {
+		        	alert("!!!!");
+		        	alert(result.searchKeyword);
+	            },
+	            error: function (error) {
+	                alert("error: " + error.responseText);
+	            }
+		    });
 		});
+		
+*/

@@ -52,7 +52,7 @@ public class MySqlConnection {
 		return dbpass;
 	}
 
-	public Connection getConnection() {
+	private Connection getConnection() {
 		
 		Connection conn = null;
 		try {
@@ -61,19 +61,6 @@ public class MySqlConnection {
 			e.printStackTrace();
 		}
 		return conn;
-	}
-	
-	/**
-	 * Function to close open connection to database
-	 */
-	public void closeConnection(Connection conn) {
-		if(conn != null) {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 	
 	/**

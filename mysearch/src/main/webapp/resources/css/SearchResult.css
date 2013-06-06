@@ -1,0 +1,21 @@
+#DivSearchResult{
+	width:1024px;
+	margin:auto;
+}
+#DivResult{
+;
+}
+#DivNumFound{
+	;
+}
+#DivResultList{
+	width:800px;
+	height:120px;
+}
+#DivBookmark{
+	float:left;
+	width:50px;
+	height:120px;
+}
+#PBookmark{
+}

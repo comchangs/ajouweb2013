@@ -6,30 +6,72 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/SearchResultPaging.css" media="screen"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/SearchResult.css" media="screen"/>
 <title>Insert title here</title>
 </head>
 
 <body>
-	<div id="DivSearch">
-		<form method="get" action="SearchResult">
-			Search String :<input type="text" name="searchKeyword" value="${searchKeyword }" />
-			<input type="submit" value="Search"/>
-		</form>
+	<div id="DivSearchResult">
+		<div id="DivSearch">
+			<form method="get" action="SearchResult">
+				Search String :<input type="text" name="searchKeyword" value="${searchKeyword }" />
+				<input type="submit" value="Search"/>
+			</form>
+		</div>
+		<div id="DivResult">
+			<div id="DivNumFound">검색결과 ${numFound }개</div>
+			<c:forEach var="result" items="${resultList }">
+				<div id="DivResultList">
+					<a href="${result.url }">${result.title }</a><br />
+					${result.content }<br />
+					<a href="${result.url }">${result.url }</a>
+					<div id="DivBookmark${result.index}">
+					</div>
+				</div>
+				<br />
+				<script type="text/javascript">
+				
+				if("${result.bookmark}" == "true")
+				{
+					var text = "removeBookmark(" + "${searchKeyword}" + "," + "${start}" + "," + "\"${result.url}\"" + ")";
+					button = document.createElement("button");
+					button.setAttribute("onclick", text);
+					img = document.createElement("img");
+					img.setAttribute("src", "${pageContext.request.contextPath}" + "/resources/images/bookmarkOn.png");
+					button.appendChild(img);
+					
+			 		document.getElementById("DivBookmark${result.index}").appendChild(button);
+				}
+				else if("${result.bookmark}" == "false")
+				{
+
+					var text = "addBookmark(" + "\"${searchKeyword}\"" + "," + "${start}" + "," + "\"${result.url}\"" + ")";
+					button = document.createElement("button");
+					button.setAttribute("onclick", text);
+					img = document.createElement("img");
+					img.setAttribute("src", "${pageContext.request.contextPath}" + "/resources/images/bookmarkOff.png");
+					button.appendChild(img);
+
+			 		document.getElementById("DivBookmark${result.index}").appendChild(button);
+				}
+				function addBookmark(searchKeyword, start, bookmarkUrl)
+				{
+					var url = "" + "?searchKeyword=" + searchKeyword + "&start=" + start + "" + "&bookmarkUrl=" + bookmarkUrl + "&bookmarkSelect=" + "add";
+					location.href = url; 
+				}
+
+				function removeBookmark(searchKeyword, start, bookmarkUrl)
+				{
+					var url = "" + "?searchKeyword=" + searchKeyword + "&start=" + start + "" + "&bookmarkUrl=" + bookmarkUrl + "&bookmarkSelect=" + "remove";
+					location.href = url;
+				}
+		 		</script>
+			</c:forEach>
+		</div>
+		<div id="DivPaging">
+		</div>
 	</div>
-	<div id="DivResult">
-		<div id="DivNumFound">검색결과 ${numFound }개</div>
-		<c:forEach var="result" items="${resultList }">
-			<div id="DivResultList">
-				<a href="${result.url }">${result.title }</a><br />
-				${result.content }<br />
-				<a href="${result.url }">${result.url }</a>
-			</div>
-			<br />
-		</c:forEach>
-	</div>
-	<div id="DivPaging">
-	</div>
-<!-- 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/SearchResult.js"></script> -->
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/SearchResult.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-1.3.2.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.paginate.js"></script>
 	<script type="text/javascript">
@@ -55,7 +97,6 @@
 											  }
 			});
 		});
-		
     </script>
 </body>
 </html>

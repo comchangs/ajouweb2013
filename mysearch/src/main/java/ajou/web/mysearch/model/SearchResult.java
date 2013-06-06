@@ -1,6 +1,7 @@
 package ajou.web.mysearch.model;
 
 public class SearchResult {
+	private int index;
 	private String content;
 	private String id;
 	private String title;
@@ -10,7 +11,14 @@ public class SearchResult {
 	private String url;
 	private String anchor;
 	private long version;
+	private String bookmark;
 	
+	public int getIndex() {
+		return index;
+	}
+	public void setIndex(int index) {
+		this.index = index;
+	}
 	public String getContent() {
 		return content;
 	}
@@ -65,5 +73,13 @@ public class SearchResult {
 	public void setVersion(long version) {
 		this.version = version;
 	}
+	public String getBookmark() {
+		return bookmark;
+	}
+	public void setBookmark(String bookmark) {
+		this.bookmark = bookmark;
+	}
+
+
 
 }
