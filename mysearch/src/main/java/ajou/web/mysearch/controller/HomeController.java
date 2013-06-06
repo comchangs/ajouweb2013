@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 /**
@@ -23,8 +25,10 @@ import static org.springframework.data.mongodb.core.query.Criteria.where;
 @Controller
 public class HomeController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	ApplicationContext ctx = new GenericXmlApplicationContext("SpringConfig.xml");
+	MongoOperations mongoOperation = (MongoOperations)ctx.getBean("mongoTemplate");
 	
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -49,6 +53,23 @@ public class HomeController {
 		return "d3js";
 	}
 	
+	@RequestMapping(value = "/cloud", method = RequestMethod.GET)
+	public String cloud(Locale locale, Model model, @RequestParam("keyword") String search_keyword) {
+		logger.info("Word Cloud!", locale);
+		String json_data = "[ ]";
+		logger.info(search_keyword, locale);
+		if (search_keyword==null && search_keyword.trim().equals("")) {
+			search_keyword = "in";
+		} else {
+			GroupByResults<Keyword> results = mongoOperation.group(where("search_keyword").is(search_keyword),"keyword",
+	                GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
+	                Keyword.class);
+			json_data = results.getRawResults().get("retval").toString();
+			model.addAttribute("json_data", json_data );
+		}
+		return "cloud";
+	}
+	
 	@RequestMapping(value = "/jsonp", method = RequestMethod.GET)
 	public String jsonp(Locale locale, Model model) {
 		logger.info("JSONP", locale);
@@ -60,18 +81,16 @@ public class HomeController {
 	public String relation(Locale locale, Model model) {
 		logger.info("relation_keyword", locale);
 
-		ApplicationContext ctx = new GenericXmlApplicationContext("SpringConfig.xml");
-		MongoOperations mongoOperation = (MongoOperations)ctx.getBean("mongoTemplate");
 		//mongoOperation.group("")
 		/*
 		GroupByResults<XObject> results = mongoOperation.group(where("search_keyword").is("man"),"", 
                 GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
                 XObject.class);
                 */
-		GroupByResults<Keyword> results = mongoOperation.group("keyword", 
+		GroupByResults<Keyword> results = mongoOperation.group(where("search_keyword").is("in"),"keyword",
                 GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
                 Keyword.class);
-		String json_data = results.getRawResults().toString();
+		String json_data = results.getRawResults().get("retval").toString();
 		model.addAttribute("json_data", json_data );
 		
 		return "relation_keyword";

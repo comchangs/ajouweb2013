@@ -12,7 +12,7 @@
 <link href="${pageContext.request.contextPath}/resources/css/cloud.css" rel="stylesheet">
 <link rel="image_src" href="${pageContext.request.contextPath}/resources/images/amazing.png">
 </head>
-
+<body>
 <div id="vis"></div>
 
 <form id="form">
@@ -68,3 +68,5 @@
 <script src="${pageContext.request.contextPath}/resources/js/d3.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/d3.layout.cloud.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/cloud.js"></script>
+</body>
+</html>

@@ -11,7 +11,7 @@ var words = [],
     tags,
     fontSize,
     maxLength = 30,
-    fetcher = "http://ec2-54-249-102-156.ap-northeast-1.compute.amazonaws.com:8983/solr/collection1/select?q={keyword}&wt=json&indent=true",
+    fetcher = "http://localhost:8080/mysearch/relation_keyword?keyword={keyword}",
     statusText = d3.select("#status");
 
 var layout = d3.layout.cloud()
@@ -39,6 +39,7 @@ var tabs = d3.select("#presets").selectAll("a")
       {fetcher: "http://search.twitter.com/search.json?rpp=100&q={keyword}", name: "Twitter"},
       //{fetcher: "http://api.twitter.com/1/statuses/user_timeline.json?screen_name={keyword}&count=200&trim_user=1", name: "Tweeps"},
       //{fetcher: "http://en.wikipedia.org/wiki/{keyword}", name: "Wikipedia"},
+      {fetcher: "http://localhost:8080/mysearch/relation_keyword?keyword={keyword}", name: "relation_keyword"},
       {fetcher: "", name: "Custom", id: "custom"}
     ])
   .enter().append("a")
@@ -108,13 +109,13 @@ function getURL(url, word, callback) {
     var iframe = d3.select("body").append("iframe").style("display", "none");
     d3.select(window).on("message", function() {
       var json = JSON.parse(d3.event.data);
-      callback((Array.isArray(json) ? json : json.results).map(function(d) { return d.text; }).join("\n\n"));
+      callback((Array.isArray(json) ? json : json.results).map(function(d) { return d.relation_keyword; }).join("\n\n"));
       iframe.remove();
     });
-    //iframe.attr("src", "jsonp?" + encodeURIComponent(url));
+    iframe.attr("src", "jsonp?" + encodeURIComponent(url));
     iframe.attr("src", url);
-    return;
- // }
+  //  return;
+  //}
 /*
   try {
     d3.text(url, function(text) {
@@ -131,6 +132,7 @@ function proxy(url, callback) {
   d3.text("//www.jasondavies.com/xhr?url=" + encodeURIComponent(url), callback);
 }
 */
+
 function flatten(o, k) {
   if (typeof o === "string") return o;
   var text = [];
@@ -319,7 +321,7 @@ d3.select("#random-palette").on("click", function() {
       arc = d3.svg.arc()
         .innerRadius(0)
         .outerRadius(r);
-/*
+
   d3.selectAll("#angle-count, #angle-from, #angle-to")
       .on("change", getAngles)
       .on("mouseup", getAngles);
@@ -385,7 +387,7 @@ d3.select("#random-palette").on("click", function() {
     d3.select("#angle-from").property("value", from);
     d3.select("#angle-to").property("value", to);
   }
-*/
+
   function cross(a, b) { return a[0] * b[1] - a[1] * b[0]; }
   function dot(a, b) { return a[0] * b[0] + a[1] * b[1]; }
 })();
