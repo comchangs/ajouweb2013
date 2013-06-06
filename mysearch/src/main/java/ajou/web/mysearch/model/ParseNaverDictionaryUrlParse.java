@@ -53,7 +53,7 @@ public class ParseNaverDictionaryUrlParse {
 			in = new InputStreamReader(con.getInputStream(), "UTF-8");
 
 			int c;
-			System.out.println("In Model.UrlParse.getURL(String Url) Finding MetaData And ContentData..");
+//			System.out.println("In Model.UrlParse.getURL(String Url) Finding MetaData And ContentData..");
 			while ((c = in.read()) != -1) {
 /*				if(find[FINDNUM.FINDMETADATA.ordinal()] == false)
 					getMeta((char) c);*/
@@ -62,8 +62,8 @@ public class ParseNaverDictionaryUrlParse {
 				else
 					break;
 			}
-			metaTagDelete();
-			meta.add(metaBuff);
+//			metaTagDelete();
+//			meta.add(metaBuff);
 			content.add(contentBuff);
 			
 		} catch (MalformedURLException e) {
@@ -104,10 +104,10 @@ public class ParseNaverDictionaryUrlParse {
 			return null;
 	}
 	
-	/* 아래 부분은 해당 html에서 내용을 추출하기 위함임.
-	 * meta의 경우는 공통적으로 og:description 다음에, content의 경우는 공통적으로 window.onload = function() 다음에 나오게 된다.
+	/* �꾨옒 遺�텇���대떦 html�먯꽌 �댁슜��異붿텧�섍린 �꾪븿��
+	 * meta��寃쎌슦��怨듯넻�곸쑝濡�og:description �ㅼ쓬�� content��寃쎌슦��怨듯넻�곸쑝濡�window.onload = function() �ㅼ쓬���섏삤寃��쒕떎.
 	 * 
-	 * 좀 거지같긴한데 우리가 백과사전을 가지고 있었다면 이런짓은 안해도 될거라는 생각으로 작성..*/
+	 * 醫�嫄곗�媛숆릿�쒕뜲 �곕━媛�諛깃낵�ъ쟾��媛��怨��덉뿀�ㅻ㈃ �대윴吏볦� �덊빐���좉굅�쇰뒗 �앷컖�쇰줈 �묒꽦..*/
 	protected void getMeta(char c)
 	{
 		if(c == '\n')
@@ -204,6 +204,16 @@ public class ParseNaverDictionaryUrlParse {
 			else if((index = buff.indexOf("<h")) != -1 || (index = buff.indexOf("</h")) != -1)
 				deleteTagInIndex(index);
 			else if((index = buff.indexOf("<ol")) != -1 || (index = buff.indexOf("</ol")) != -1)
+				deleteTagInIndex(index);
+			else if((index = buff.indexOf("<em")) != -1 || (index = buff.indexOf("</em")) != -1)
+				deleteTagInIndex(index);
+			else if((index = buff.indexOf("<dl")) != -1 || (index = buff.indexOf("</dl")) != -1)
+				deleteTagInIndex(index);
+			else if((index = buff.indexOf("<dt")) != -1 || (index = buff.indexOf("</dt")) != -1)
+				deleteTagInIndex(index);
+			else if((index = buff.indexOf("<dd")) != -1 || (index = buff.indexOf("</dd")) != -1)
+				deleteTagInIndex(index);
+			else if((index = buff.indexOf("<B")) != -1 || (index = buff.indexOf("</B")) != -1)
 				deleteTagInIndex(index);
 			else
 				complete = false;

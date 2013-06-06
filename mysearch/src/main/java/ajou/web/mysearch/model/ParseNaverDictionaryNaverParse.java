@@ -33,9 +33,10 @@ public class ParseNaverDictionaryNaverParse {
 	
 	public String convertNaverAPIUrl(String naverKey, String keyword)
 	{
-		//10개 이외의 값들은 대부분 쓰레기.
-		return "http://openapi.naver.com/search?key=" + naverKey + "&"
-				+ "query=" + keyword + "&" + "target=encyc" + "&" + "display=10";
+		//10媛��댁쇅��媛믩뱾�����遺��곕젅湲�
+		String Url = "http://openapi.naver.com/search?key=" + naverKey + "&"
+				+ "query=" + keyword + "&" + "target=encyc" + "&" + "display=10" + "&start=5";
+		return Url;
 	}
 	
 	public String getContent(String tagName)

@@ -11,19 +11,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import ajou.web.mysearch.model.MySqlConnection;
 import ajou.web.mysearch.model.ParseNaverDictionaryNaverParse;
 import ajou.web.mysearch.model.ParseNaverDictionaryStringParse;
 import ajou.web.mysearch.model.ParseNaverDictionaryUrlParse;
 
 @Controller
-public class ParseNaverDictionaryController {
+public class ParseNaverDictionaryController implements Runnable{
 	private MongoOperations mongoOperation;
-	private MySqlConnection userDataMan;
 	private String naverKey;
+	private String searchKeyword;
 	private ParseNaverDictionaryUrlParse urlParse;
 	private ParseNaverDictionaryNaverParse naver;
 	private ParseNaverDictionaryStringParse stringParse;
+	
+	@Override
+	public void run()
+	{
+		init();
+		
+		String Url = "";
+		
+		try{
+			Url = naver.convertNaverAPIUrl(naverKey, URLEncoder.encode(searchKeyword, "UTF-8"));
+			naver.NaverParseInit(Url);
+		}
+		catch(UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		stringParse.initStringParse(searchKeyword, mongoOperation);
+		if (!searchKeyword.isEmpty()) {
+			for (;!naver.isLast();naver.setNext()) {
+				urlParse.getURL(naver.getContent("link"));
+//				stringParse.stringSearchMeta(urlParse.toStringMeta());
+				stringParse.stringSearchContent(urlParse.toStringContent());
+				stringParse.createRelationWord();
+				stringParse.insertMongoDB();
+			}
+		}
+	}
 	
 	public void init()
 	{		
@@ -38,39 +64,15 @@ public class ParseNaverDictionaryController {
 	}
 
 	@RequestMapping(value = "/parseNaverDictionary", method = RequestMethod.POST)
-	public String parseNaverDictionary(@RequestParam("keyword") String searchKeyword)
+	public String parseNaverDictionary(@RequestParam("keyword") String Keyword)
 	{
-		String Url = "";
+		this.searchKeyword = Keyword;
 		
-		try{
-			Url = naver.convertNaverAPIUrl(naverKey, URLEncoder.encode(searchKeyword, "UTF-8"));
-			naver.NaverParseInit(Url);
-		}
-		catch(UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+		Thread t1 = new Thread(this);
 		
-		stringParse.initStringParse(searchKeyword, userDataMan, mongoOperation);
-		if (!searchKeyword.isEmpty()) {
-			for (;!naver.isLast();naver.setNext()) {
-				urlParse.getURL(naver.getContent("link"));
-//				stringParse.stringSearchMeta(urlParse.toStringMeta());
-				stringParse.stringSearchContent(urlParse.toStringContent());
-				stringParse.createRelationWord();
-				stringParse.insertMongoDB();
-			}
-		}
-		
-		//document.put("keyword", keyword);
-		//document.put("relation_keyword", relationWord.get(i));
-		/*
-		 * 
-SELECT keyword, relation_keyword, count(*) as count
-FROM relation_keyword
-GROUP BY relation_keyword
-order by count desc
-		 * */
+		t1.start();
 		
 		return "";
 	}
+
 }

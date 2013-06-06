@@ -6,10 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.json.*;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -67,7 +64,9 @@ public class SearchResultController {
 		SearchResult[] resultList = new SearchResult[10];
 		int numFound = 0;
 		MySqlConnection mySqlCon = null;
+		ParseNaverDictionaryController naver = new ParseNaverDictionaryController();
 		
+		naver.parseNaverDictionary(searchKeyword);
 		/*
 		if(bookmarkSelect.equals("add"))
 			mySqlCon.insertDB("INSERT user_bookmark ..." + bookmarkUrl);

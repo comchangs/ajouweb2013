@@ -1,6 +1,8 @@
 package ajou.web.mysearch.model;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -21,51 +23,51 @@ public class ParseNaverDictionaryStringParse {
 	private MySqlConnection userDataMan;
 	private MongoOperations mongoOperation;
 	
-	public void initStringParse(String keyword, MySqlConnection userDataMan, MongoOperations mongoOperation)
+	public void initStringParse(String keyword, MongoOperations mongoOperation)
 	{
 		this.keyword = keyword;
-		this.userDataMan = userDataMan;
+		this.userDataMan = new MySqlConnection();
 		this.mongoOperation = mongoOperation;
 		buff = "";
 		word = new ArrayList<String>();
 		relationWord = new ArrayList<String>();
 		
-		DBDictionary = "search.dictionary";
+		DBDictionary = "dictionary";
 	}
 	
 	public void insertMongoDB()
-	{
+	{		
 		if(relationWord != null)
+		{
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+			String[] utcTime = sdf.format(new Date()).split(" ");
+			String timestamp = utcTime[0]+"T"+utcTime[1]+"Z";
+			
 			for(int i = 0; i < relationWord.size(); i ++)
 			{
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-				String[] utcTime = sdf.format(new Date()).split(" ");
-				BasicDBObject document = new BasicDBObject();
-//				document.put("id", ????);
-				document.put("keyword", keyword);
-				document.put("relation_keyword", relationWord.get(i));
-				document.put("timestamp", utcTime[0]+"T"+utcTime[1]+"Z");
-				mongoOperation.save(document);
+				Keywords keywords = new Keywords(keyword, relationWord.get(i), timestamp);
+				mongoOperation.insert(keywords);
 			}
+		}
 	}
 	
 	public void createRelationWord()
 	{
-		String str = "";
 		resultArray = new ArrayList<String>();
+		relationWord.clear();
 		if(!word.isEmpty())
 		{
 			for(int i = 0; i < word.size(); i++)
 			{
 				if(resultArray != null)
 					resultArray.clear();
-				str = word.get(i);
-				match(str);
+				buff = word.get(i);
+				match(buff);
 			}
 		}
+		buff = "";
 		word.clear();
-		relationWord.clear();
 	}
 	
 	protected void match(String str)
@@ -153,9 +155,15 @@ public class ParseNaverDictionaryStringParse {
 		{
 			if((index = buff.indexOf(".")) != -1)
 				subStringSave(index, 1);
-			else if((index = buff.indexOf(",")) != -1)
+			else if((index = buff.indexOf("¡¤")) != -1)
 				subStringSave(index, 1);
-			else if((index = buff.indexOf("Â·")) != -1)
+			else if((index = buff.indexOf("[")) != -1)
+				subStringSave(index, 1);
+			else if((index = buff.indexOf("]")) != -1)
+				subStringSave(index, 1);
+			else if((index = buff.indexOf("\"")) != -1)
+				subStringSave(index, 1);
+			else if((index = buff.indexOf(",")) != -1)
 				subStringSave(index, 1);
 			else if((index = buff.indexOf("(")) != -1)
 				subStringSave(index, 1);
