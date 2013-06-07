@@ -175,4 +175,26 @@ public class MySqlConnection {
 
 		return result;
 	}
+	
+	public ArrayList<String> getAutoComplete(String name) {
+		
+		ArrayList<String> list = new ArrayList<String>();
+		Connection conn = getConnection();
+		if(conn != null) {
+			ResultSet rs = null;
+			PreparedStatement ps = null;
+			try {
+				String sqlQuery = "SELECT custname FROM custdata WHERE custname LIKE '"+name+"%'";
+				System.out.println(sqlQuery);
+				ps = conn.prepareStatement(sqlQuery);
+				rs = ps.executeQuery();
+				while (rs.next()) {
+					list.add(rs.getString("custname"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return list;
+	}
 }
