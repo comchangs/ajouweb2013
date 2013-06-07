@@ -68,7 +68,7 @@ public class SearchResultController {
 		if(bookmarkSelect.equals("add"))
 			mySqlCon.insertDB("INSERT bookmark(user_id, url) VALUES ('" + userId + "','" + bookmarkUrl + "')");
 		else if(bookmarkSelect.equals("remove"))
-			mySqlCon.insertDB("DELETE FROM bookmark WHERE userId='" + userId + "' AND url='" + bookmarkUrl + "'");
+			mySqlCon.insertDB("DELETE FROM bookmark WHERE user_id='" + userId + "' AND url='" + bookmarkUrl + "'");
 	}
 	
 	@RequestMapping(value = "/SearchResult", method = RequestMethod.GET)
@@ -99,7 +99,7 @@ public class SearchResultController {
 			e1.printStackTrace();
 		}
 		
-//		naverParse(start, bookmarkUrl, bookmarkSelect, searchKeywordNotEncode);
+		naverParse(start, bookmarkUrl, bookmarkSelect, searchKeywordNotEncode);
 		User user = (User)session.getAttribute("user"); 
 		Bookmark(user.getUserId(), bookmarkUrl, bookmarkSelect);
 		
