@@ -11,9 +11,9 @@
 		$.getJSON('http://smart-ip.net/geoip-json?callback=?', function(ip) {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'http%3A%2F%2Fapi.wxbug.net%2FgetLiveWeatherRSS.aspx%3FACode%3DA5350497592%26lat%3D" + ip.latitude + "%26long%3D" + ip.longitude + "%26unittype%3D1'&format=json&callback=", function(weather) {
 				if(weather.query.results.rss.channel.weather.ob['ob-date'].hour['hour-24'] < 6 || weather.query.results.rss.channel.weather.ob['ob-date'].hour['hour-24'] > 18) {
-					$('body').css("backgroundImage", "url('http://farm5.staticflickr.com/4030/4677344119_73183fbb4f_b.jpg')");
+					$('body').css("backgroundImage", "url('http://farm9.staticflickr.com/8248/8505945175_1f109030c3_h.jpg')");
 				} else {
-					$('body').css("backgroundImage", "url('http://farm5.staticflickr.com/4016/4273931840_6c94bd6c0e_b.jpg')");
+					$('body').css("backgroundImage", "url('http://farm8.staticflickr.com/7114/7429037498_a9b383ff2e_h.jpg')");
 				}
 				var imgStr = weather.query.results.rss.channel.weather.ob['current-condition'].icon;
 				$('#weather').append("<img src=http://img.weather.weatherbug.com/forecast/icons/localized/105x88/en/trans/cond" + imgStr.substr(imgStr.length - 7, 3) + ".png>");
