@@ -9,6 +9,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -32,6 +36,7 @@ import ajou.web.mysearch.model.User;
 @Controller
 public class SearchResultController {
 	
+	private	MySqlConnection mySqlCon;
 	/*	private String key = "";
 	private int sta;
 	private int numF;
@@ -48,6 +53,23 @@ public class SearchResultController {
 		return json;
 	}*/
 	
+	private void naverParse(String start, String bookmarkUrl, String bookmarkSelect, String searchKeywordNotEncode)
+	{		
+		if(start.equals("0") && bookmarkUrl.equals("null") && bookmarkSelect.equals("null"))
+		{
+			ParseNaverDictionaryController naver = new ParseNaverDictionaryController();
+			naver.parseNaverDictionary(searchKeywordNotEncode);
+		}
+		
+	}
+	
+	private void Bookmark(String userId, String bookmarkUrl, String bookmarkSelect)
+	{
+		if(bookmarkSelect.equals("add"))
+			mySqlCon.insertDB("INSERT bookmark VALUES ('" + userId + "','" + bookmarkUrl + "')");
+		else if(bookmarkSelect.equals("remove"))
+			mySqlCon.insertDB("DELETE FROM bookmark WHERE userId='" + userId + "' AND url='" + bookmarkUrl + "'");
+	}
 	
 	@RequestMapping(value = "/SearchResult", method = RequestMethod.GET)
 	public ModelAndView SearchResult(
@@ -55,24 +77,20 @@ public class SearchResultController {
 			@RequestParam(value = "start", defaultValue = "0") String start,
 			@RequestParam(value = "bookmarkUrl", defaultValue = "null") String bookmarkUrl,
 			@RequestParam(value = "bookmarkSelect", defaultValue = "null") String bookmarkSelect,
-			@RequestParam(value = "userId", defaultValue = "") String userId) {
+			HttpServletRequest request,
+			HttpServletResponse response) {
 		/*
 		 * String keyword = request.getParameter("searchKeyword"); String
 		 * startTemp = (request.getParameter("start") == null) ? "0" :
 		 * request.getParameter("start");
 		 */
-		/*
-		if(userId.equals(""))
-		{
-			ModelAndView mv = new ModelAndView();
-			
-			mv.setViewName("Login");
-			
-			return mv;
-		}
-		*/
+		HttpSession session = request.getSession(true);		
 		int startNum = Integer.parseInt(start);
 		String searchKeywordNotEncode = "";
+		URL url = null;
+		SearchResult[] resultList = new SearchResult[10];
+		int numFound = 0;
+		mySqlCon = new MySqlConnection();
 
 		try {
 			searchKeywordNotEncode = new String(searchKeyword.getBytes("8859_1"),"UTF-8");
@@ -80,24 +98,10 @@ public class SearchResultController {
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
-		// keyword = new String(keyword.getBytes("EUC-KR"), "UTF-8");
-
-		URL url = null;
-		SearchResult[] resultList = new SearchResult[10];
-		int numFound = 0;
-		MySqlConnection mySqlCon = null;
 		
-		if(start.equals("0") && bookmarkUrl.equals("null") && bookmarkSelect.equals("null"))
-		{
-			ParseNaverDictionaryController naver = new ParseNaverDictionaryController();
-			naver.parseNaverDictionary(searchKeywordNotEncode);
-		}
-		
-		/*
-		if(bookmarkSelect.equals("add"))
-			mySqlCon.insertDB("INSERT user_bookmark ..." + bookmarkUrl);
-		else if(bookmarkSelect.equals("remove"))
-			mySqlCon.insertDB("DELETE user_bookmark ..." + bookmarkUrl);*/
+		naverParse(start, bookmarkUrl, bookmarkSelect, searchKeywordNotEncode);
+		User user = (User)session.getAttribute("user"); 
+		Bookmark(user.getUserId(), bookmarkUrl, bookmarkSelect);
 		
 		try {//
 			url = new URL(
@@ -116,7 +120,6 @@ public class SearchResultController {
 			JSONObject responseObject = (JSONObject) searchResult.get("response");
 			numFound = Integer.parseInt(responseObject.get("numFound").toString());
 			if (numFound != 0) {
-				mySqlCon = new MySqlConnection();
 				JSONArray resultArray = (JSONArray) responseObject.get("docs");
 				
 				for (int i = 0; i < resultArray.size(); i++) {
@@ -145,14 +148,11 @@ public class SearchResultController {
 					 * sr.setAnchor(anchorArray.toString());
 					 * sr.setVersion((long) resultBuff.get("_version_"));
 					 */
-					/*
-					ArrayList<String> bookmark = mySqlCon.selectDb("SELECT count(*) "+ 
-					"FROM user Join userbookmark on user.userid = userbookmark.userid" +
-					"WHERE userid=" + userid + " AND bookmark=" + resultList[i].getUrl());
-					if(Integer.parseInt(bookmark.get(0)) > 0)
-						resultList[i].setBookmark(true);
+					
+					if(mySqlCon.getBookmarkUrl(user.getUserId(), bookmarkUrl))
+						resultList[i].setBookmark("true");
 					else
-						resultList[i].setBookmark(false);*/ 
+						resultList[i].setBookmark("false");
 				}
 			} else {
 				resultList[0] = new SearchResult();
