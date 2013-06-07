@@ -1,26 +1,95 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+
+
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>My Search</title>
+<link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet" type="text/css" media="screen" />
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/SearchResultPaging.css" media="screen"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/SearchResult.css" media="screen"/>
-<title>Insert title here</title>
+<script src="${pageContext.request.contextPath}/resources/js/d3.min.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/d3.layout.cloud.js"></script>
 </head>
-
 <body>
-	<div id="DivSearchResult">
-		<div id="DivSearch">
-			<form method="get" action="SearchResult">
-				Search String :<input type="text" name="searchKeyword" value="${searchKeyword }" />
+<div id="wrapper">
+	<div id="menu-wrapper">
+	</div>
+	<div id="logo" class="container">
+		<h1><a href="#">My Search</a></h1>
+		<form method="get" action="SearchResult">
+				<input type="text" name="searchKeyword" value="${searchKeyword }" />
 				<input type="submit" value="Search"/>
 			</form>
-		</div>
-		<div id="DivResult">
-			<div id="DivNumFound">검색결과 ${numFound }개</div>
-			<c:forEach var="result" items="${resultList }">
+	</div>
+	<div id="page" class="container">
+		<div id="content">
+			<div class="post">
+			<script>
+	var data = ${cloud};
+	var w = 1200,
+		h = 200;
+	var r = 40.5,
+		d = 90;
+	var fill = d3.scale.category20();
+
+  
+  d3.layout.cloud()
+  .timeInterval(10)
+  .size([w, h])
+      .words(data.map(function(d) {
+        return {text: d.relation_keyword, size: 20 + d.count * 5};
+      }))
+      .rotate(function() { return ~~(Math.random() * 6) * 60 * (Math.random()*6); })
+      .font("Impact")
+      .fontSize(function(d) { return d.size; })
+      .on("end", draw)
+      .start();
+  
+  function draw(words) {
+	  var text = d3.select("#vis").append("svg")
+	  .attr("width", w)
+        .attr("height", h)
+      .append("g")
+        .attr("transform", "translate(" + [w >> 1, h >> 1] + ")").selectAll("text")
+      .data(words, function(d) { return d.text.toLowerCase(); });
+  text.transition()
+      .duration(1000)
+      .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
+      .style("font-size", function(d) { return d.size + "px"; });
+  text.enter().append("text")
+      .attr("text-anchor", "middle")
+      .attr("transform", function(d) { return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")"; })
+      .style("font-size", function(d) { return d.size + "px"; })
+      .on("click", function(d) {
+        load(d.text);
+      })
+      .style("opacity", 1e-6)
+    .transition()
+      .duration(1000)
+      .style("opacity", 1);
+  text.style("font-family", function(d) { return d.font; })
+      .style("fill", function(d) { return fill(d.text.toLowerCase()); })
+      .text(function(d) { return d.text; });
+  }
+  
+  function load(d) {
+	  window.location.href = '?searchKeyword='+d;
+	}
+</script>
+<div id="vis"></div>
+				<h2 class="title"><a href="#">검색결과: ${numFound }개</a></h2>
+				<div class="entry">
+				<div id="DivResult">
+					<c:forEach var="result" items="${resultList }">
 				<div id="DivResultList">
 					<a href="${result.url }">${result.title }</a><br />
 					${result.content }<br />
@@ -67,11 +136,21 @@
 				}
 		 		</script>
 			</c:forEach>
+			</div>
+			<div id="DivPaging">
 		</div>
-		<div id="DivPaging">
+				</div>
+			</div>
+			<div style="clear: both;">&nbsp;</div>
 		</div>
 	</div>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/SearchResult.js"></script>
+
+</div>
+<div id="footer">
+	<p>© 2013 Ajou Webprogramming - Project team MySearch. All rights reserved.</p>
+</div>
+
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/SearchResult.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-1.3.2.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.paginate.js"></script>
 	<script type="text/javascript">
@@ -100,3 +179,8 @@
     </script>
 </body>
 </html>
+
+
+
+
+

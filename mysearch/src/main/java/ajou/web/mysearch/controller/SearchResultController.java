@@ -1,5 +1,7 @@
 package ajou.web.mysearch.controller;
 
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -11,12 +13,18 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.GenericXmlApplicationContext;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.mapreduce.GroupBy;
+import org.springframework.data.mongodb.core.mapreduce.GroupByResults;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import ajou.web.mysearch.controller.HomeController.Keyword;
 import ajou.web.mysearch.model.SearchResult;
 import ajou.web.mysearch.model.MySqlConnection;
 import ajou.web.mysearch.model.User;
@@ -53,6 +61,7 @@ public class SearchResultController {
 		 * startTemp = (request.getParameter("start") == null) ? "0" :
 		 * request.getParameter("start");
 		 */
+		/*
 		if(userId.equals(""))
 		{
 			ModelAndView mv = new ModelAndView();
@@ -61,7 +70,7 @@ public class SearchResultController {
 			
 			return mv;
 		}
-		
+		*/
 		int startNum = Integer.parseInt(start);
 		String searchKeywordNotEncode = "";
 
@@ -159,12 +168,22 @@ public class SearchResultController {
 
 		// SearchResult sr = new SearchResult(searchKeyword, titleArray,
 		// descriptionArray, keywordArray);
+		ApplicationContext ctx = new GenericXmlApplicationContext("SpringConfig.xml");
+		MongoOperations mongoOperation = (MongoOperations)ctx.getBean("mongoTemplate");
+		String json_data = "[ ]";
+		GroupByResults<Keyword> results = null;
+		results = mongoOperation.group(where("search_keyword").is(searchKeywordNotEncode),"keyword",
+		        GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
+		        Keyword.class);
+
+		json_data = results.getRawResults().get("retval").toString();
 
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("resultList", resultList);
 		mv.addObject("searchKeyword", searchKeywordNotEncode);
 		mv.addObject("start", start);
 		mv.addObject("numFound", numFound);
+		mv.addObject("cloud", json_data);
 		
 		mv.setViewName("SearchResult");
 		
