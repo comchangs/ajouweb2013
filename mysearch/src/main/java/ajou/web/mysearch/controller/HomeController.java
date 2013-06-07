@@ -16,6 +16,8 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapreduce.GroupBy;
 import org.springframework.data.mongodb.core.mapreduce.GroupByResults;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,6 +61,19 @@ public class HomeController {
 
 		return "d3js";
 	}
+	
+	@RequestMapping(value = "/rank", method = RequestMethod.GET)
+	public String rank(Locale locale, Model model) {
+		logger.info("rank!", locale);
+
+		GroupByResults<Keyword> results = mongoOperation.group("search_keyword",
+                GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
+                Keyword.class);
+		String json_data = results.getRawResults().get("retval").toString();
+		model.addAttribute("json_data", json_data );
+		return "json";
+	}
+	
 	
 	@RequestMapping(value = "/cloud", method = RequestMethod.GET)
 	public String cloud(Locale locale, Model model, @RequestParam("keyword") String search_keyword) {
