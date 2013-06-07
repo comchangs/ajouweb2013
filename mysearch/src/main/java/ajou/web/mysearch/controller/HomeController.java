@@ -1,9 +1,14 @@
 package ajou.web.mysearch.controller;
 
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -16,6 +21,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import ajou.web.mysearch.model.MySqlConnection;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
@@ -43,7 +50,7 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "home";
+		return "SearchResultTest";
 	}
 	
 	@RequestMapping(value = "/wordcloud", method = RequestMethod.GET)
@@ -59,22 +66,45 @@ public class HomeController {
 		String json_data = "[ ]";
 		logger.info(search_keyword, locale);
 		if (search_keyword==null && search_keyword.trim().equals("")) {
-			search_keyword = "in";
+			search_keyword = "";
 		} else {
-			GroupByResults<Keyword> results = mongoOperation.group(where("search_keyword").is(search_keyword),"keyword",
-	                GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
-	                Keyword.class);
+			GroupByResults<Keyword> results = null;
+			try {
+				results = mongoOperation.group(where("search_keyword").is(new String(search_keyword.getBytes("8859_1"),"UTF-8")),"keyword",
+				        GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
+				        Keyword.class);
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			json_data = results.getRawResults().get("retval").toString();
 			model.addAttribute("json_data", json_data );
 		}
 		return "cloud";
 	}
 	
-	@RequestMapping(value = "/jsonp", method = RequestMethod.GET)
-	public String jsonp(Locale locale, Model model) {
+	@RequestMapping(value = "/autocomplete", method = RequestMethod.GET)
+	public String jsonp(Locale locale, Model model, @RequestParam("keyword") String search_keyword) {
 		logger.info("JSONP", locale);
+		MySqlConnection mysql = new MySqlConnection();
+		ArrayList<String> list = null;
+		try {
+			list = mysql.getAutoComplete(new String(search_keyword.getBytes("8859_1"),"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		return "jsonp";
+		JSONArray array = new JSONArray();
+        for(String item : list) {
+            JSONObject obj = new JSONObject();
+            obj.put("label", item);
+            array.add(obj);
+        }
+
+        model.addAttribute("json_data", array.toJSONString() );
+
+		return "autocomplete";
 	}
 	
 	@RequestMapping(value = "/relation_keyword", method = RequestMethod.GET)
