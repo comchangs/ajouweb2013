@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.servlet.ModelAndView;
 
 import ajou.web.mysearch.model.Keywords;
-import ajou.web.mysearch.model.ParseHtml;
 
 import com.ibm.icu.text.CharsetDetector;
 
@@ -28,8 +26,8 @@ import com.ibm.icu.text.CharsetDetector;
 @SessionAttributes
 public class ParseHtmlController {
 
-	@RequestMapping(value = "/parseHtml", method = RequestMethod.POST)
-	public ModelAndView parseUrl(@RequestParam("keyword") String searchKeyword, @RequestParam("url") String urlString)
+	@RequestMapping(value = "/parseHtml", method = RequestMethod.GET)
+	public String parseUrl(@RequestParam("keyword") String searchKeyword, @RequestParam("url") String urlString)
 			throws IOException {
 		String title = null;
 		String description = null;
@@ -90,8 +88,8 @@ public class ParseHtmlController {
 		}
 		
 		
-		ParseHtml ph = new ParseHtml(searchKeyword, titleArray, descriptionArray, keywordArray);
+		// ParseHtml ph = new ParseHtml(searchKeyword, titleArray, descriptionArray, keywordArray);
 
-		return new ModelAndView("addUrl", "command", ph);
+		return new String("redirect:" + urlString);
 	}
 }

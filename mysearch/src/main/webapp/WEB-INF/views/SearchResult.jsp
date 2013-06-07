@@ -22,7 +22,6 @@
   <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/SearchResult.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-1.3.2.js"></script>
 	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.paginate.js"></script>
-
 </head>
 <body>
 <div id="wrapper">
@@ -46,7 +45,6 @@
 	var r = 40.5,
 		d = 90;
 	var fill = d3.scale.category20();
-
   
   d3.layout.cloud()
   .timeInterval(10)
@@ -59,6 +57,7 @@
       .fontSize(function(d) { return d.size; })
       .on("end", draw)
       .start();
+  
   
   function draw(words) {
 	  var text = d3.select("#vis").append("svg")
@@ -97,9 +96,9 @@
 				<div id="DivResult">
 					<c:forEach var="result" items="${resultList }">
 				<div id="DivResultList">
-					<a href="${result.url }">${result.title }</a><br />
+					<a href="parseHtml?keyword=${searchKeyword }&url=${result.url }">${result.title }</a><br />
 					${result.content }<br />
-					<a href="${result.url }">${result.url }</a>
+					<a href="parseHtml?keyword=${searchKeyword }&url=${result.url }">${result.url }</a>
 					<div id="DivBookmark${result.index}">
 					</div>
 				</div>

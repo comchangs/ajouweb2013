@@ -174,4 +174,11 @@ public class HomeController {
 		
 		return "showWeather";
 	}
+	
+	@RequestMapping(value ="/inputKeywords", method = RequestMethod.GET)
+	public String inputkeywords(Locale locale, Model model) {
+		logger.info("Input related keywords", locale);
+		
+		return "inputRelatedKeywords";
+	}
 }
