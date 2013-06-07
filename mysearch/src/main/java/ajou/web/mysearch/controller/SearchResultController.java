@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ajou.web.mysearch.model.SearchResult;
 import ajou.web.mysearch.model.MySqlConnection;
+import ajou.web.mysearch.model.User;
 
 @Controller
 public class SearchResultController {
@@ -45,12 +46,22 @@ public class SearchResultController {
 			@RequestParam(value = "searchKeyword", defaultValue = "") String searchKeyword,
 			@RequestParam(value = "start", defaultValue = "0") String start,
 			@RequestParam(value = "bookmarkUrl", defaultValue = "null") String bookmarkUrl,
-			@RequestParam(value = "bookmarkSelect", defaultValue = "null") String bookmarkSelect) {
+			@RequestParam(value = "bookmarkSelect", defaultValue = "null") String bookmarkSelect,
+			@RequestParam(value = "userId", defaultValue = "") String userId) {
 		/*
 		 * String keyword = request.getParameter("searchKeyword"); String
 		 * startTemp = (request.getParameter("start") == null) ? "0" :
 		 * request.getParameter("start");
 		 */
+		if(userId.equals(""))
+		{
+			ModelAndView mv = new ModelAndView();
+			
+			mv.setViewName("Login");
+			
+			return mv;
+		}
+		
 		int startNum = Integer.parseInt(start);
 		String searchKeywordNotEncode = "";
 
