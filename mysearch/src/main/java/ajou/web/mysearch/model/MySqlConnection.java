@@ -214,6 +214,47 @@ public class MySqlConnection {
 		return result;
 	}
 	
+	public ArrayList<Bookmark> getBookmark(String query)
+	{
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		ArrayList<Bookmark> result = new ArrayList<Bookmark>();
+		
+		try {
+			con = getConnection();
+			ps = con.prepareStatement(query);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				Bookmark mark = new Bookmark();
+				mark.setUrl(rs.getString(1));
+				mark.setName(rs.getString(2));
+				result.add(mark);
+			}
+		}
+		catch (SQLException e)
+		{
+			e.getStackTrace();
+		}
+		finally
+		{
+			try{
+			if(con != null)
+				con.close();
+			if(rs != null)
+				rs.close();
+			if(ps != null)
+				ps.close();
+			}
+			
+			catch (SQLException e)
+			{
+				e.getStackTrace();
+			}
+		}
+		return result;
+	}
+	
 	public ArrayList<String> getAutoComplete(String name) {
 		
 		ArrayList<String> list = new ArrayList<String>();

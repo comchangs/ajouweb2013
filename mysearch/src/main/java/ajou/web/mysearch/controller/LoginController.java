@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import ajou.web.mysearch.model.MySqlConnection;
 import ajou.web.mysearch.model.User;
+import ajou.web.mysearch.model.Bookmark;
 
 
 @Controller
@@ -29,7 +30,7 @@ public class LoginController {
 		
 		String targetPage = "Login";
 		HttpSession session = request.getSession(true);
-		ArrayList<String> userBookmarkList = null;
+		ArrayList<Bookmark> userBookmarkList = null;
 		
 		User user = new User();
 		
@@ -59,17 +60,11 @@ public class LoginController {
 		return mv;
 	}
 	
-	public ArrayList<String> getUserBookmark(String userId)
+	public ArrayList<Bookmark> getUserBookmark(String userId)
 	{
 		MySqlConnection sql = new MySqlConnection();
 
-		ArrayList<String> result = sql.selectDb("SELECT url FROM bookmark WHERE user_id='"+ userId + "'");
-		
-		if(result == null)
-		{
-			result = new ArrayList<String>();
-			result.add(new String("즐겨찾기 목록이 없습니다."));
-		}
+		ArrayList<Bookmark> result = sql.getBookmark("SELECT url, name FROM bookmark WHERE user_id='"+ userId + "'");
 		
 		return result;
 	}

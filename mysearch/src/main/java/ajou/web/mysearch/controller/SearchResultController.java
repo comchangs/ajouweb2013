@@ -64,11 +64,13 @@ public class SearchResultController {
 		
 	}
 	
-	private void Bookmark(String userId, String bookmarkUrl, String bookmarkSelect)
+	private void Bookmark(String userId, String bookmarkUrl, String bookmarkSelect, String bookmarkName)
 	{
 		
 		if(bookmarkSelect.equals("add"))
-			mySqlCon.insertDB("INSERT bookmark(user_id, url) VALUES ('" + userId + "','" + bookmarkUrl + "')");
+		{
+			mySqlCon.insertDB("INSERT bookmark(user_id, url, name) VALUES ('" + userId + "','" + bookmarkUrl + "','" + bookmarkName +  "')");
+		}
 		else if(bookmarkSelect.equals("remove"))
 			mySqlCon.insertDB("DELETE FROM bookmark WHERE user_id='" + userId + "' AND url='" + bookmarkUrl + "'");
 	}
@@ -79,6 +81,7 @@ public class SearchResultController {
 			@RequestParam(value = "start", defaultValue = "0") String start,
 			@RequestParam(value = "bookmarkUrl", defaultValue = "null") String bookmarkUrl,
 			@RequestParam(value = "bookmarkSelect", defaultValue = "null") String bookmarkSelect,
+			@RequestParam(value = "bookmarkName", defaultValue = "null") String bookmarkName,
 			HttpServletRequest request,
 			HttpServletResponse response) {
 		/*
@@ -99,6 +102,7 @@ public class SearchResultController {
 		try {
 			searchKeywordNotEncode = new String(searchKeyword.getBytes("8859_1"),"UTF-8");
 			searchKeyword = URLEncoder.encode(searchKeywordNotEncode, "UTF-8");
+			bookmarkName = new String(bookmarkName.getBytes("8859_1"),"UTF-8");
 		} catch (UnsupportedEncodingException e1) {
 			e1.printStackTrace();
 		}
@@ -110,7 +114,7 @@ public class SearchResultController {
 			mv.setViewName("Login");
 			return mv;
 		}
-		Bookmark(user.getUserId(), bookmarkUrl, bookmarkSelect);
+		Bookmark(user.getUserId(), bookmarkUrl, bookmarkSelect, bookmarkName);
 		
 		try {//
 			url = new URL(
