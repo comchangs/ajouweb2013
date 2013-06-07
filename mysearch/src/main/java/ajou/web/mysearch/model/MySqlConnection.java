@@ -224,7 +224,7 @@ public class MySqlConnection {
 			ResultSet rs = null;
 			PreparedStatement ps = null;
 			try {
-				String sqlQuery = "SELECT word FROM dictionary WHERE word LIKE '"+name+"%'";
+				String sqlQuery = "SELECT word FROM dictionary WHERE word LIKE '"+name+"%' limit 0, 10";
 				System.out.println(sqlQuery);
 				ps = conn.prepareStatement(sqlQuery);
 				rs = ps.executeQuery();
