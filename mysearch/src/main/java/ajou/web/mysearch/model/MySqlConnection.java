@@ -137,6 +137,46 @@ public class MySqlConnection {
 		return result;
 	}
 	
+	public boolean getBookmarkUrl(String userId, String bookmarkUrl)
+	{
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		String result = new String();
+		
+		try {
+			con = getConnection();
+			ps = con.prepareStatement("SELECT user_id FROM bookmark WHERE user_id='" + userId + "' AND url='" + bookmarkUrl + "'");
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				return true;
+			}
+			else
+				return false;
+		}
+		catch (SQLException e)
+		{
+			e.getStackTrace();
+		}
+		finally
+		{
+			try{
+			if(con != null)
+				con.close();
+			if(rs != null)
+				rs.close();
+			if(ps != null)
+				ps.close();
+			}
+			
+			catch (SQLException e)
+			{
+				e.getStackTrace();
+			}
+		}
+		return false;
+	}
+	
 	public String selectUserPasswod(String userId)
 	{
 		Connection con = null;
