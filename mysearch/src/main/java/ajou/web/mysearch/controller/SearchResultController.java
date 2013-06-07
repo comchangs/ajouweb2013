@@ -23,7 +23,7 @@ import ajou.web.mysearch.model.MySqlConnection;
 @Controller
 public class SearchResultController {
 	
-/*	private String key = "";
+	/*	private String key = "";
 	private int sta;
 	private int numF;
 	
@@ -67,9 +67,11 @@ public class SearchResultController {
 		int numFound = 0;
 		MySqlConnection mySqlCon = null;
 		
-/*		ParseNaverDictionaryController naver = new ParseNaverDictionaryController();
-		naver.parseNaverDictionary(searchKeywordNotEncode); 이렇게 두면 페이지 바뀔때마다 돈다..*/
-		
+		if(start.equals("0") && bookmarkUrl.equals("null") && bookmarkSelect.equals("null"))
+		{
+			ParseNaverDictionaryController naver = new ParseNaverDictionaryController();
+			naver.parseNaverDictionary(searchKeywordNotEncode);
+		}
 		
 		/*
 		if(bookmarkSelect.equals("add"))
