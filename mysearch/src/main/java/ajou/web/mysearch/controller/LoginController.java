@@ -1,5 +1,11 @@
 package ajou.web.mysearch.controller;
 
+import java.io.UnsupportedEncodingException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,25 +22,34 @@ public class LoginController {
 	@RequestMapping(value = "/Login", method = RequestMethod.POST)
 	public ModelAndView Join(
 			@RequestParam(value = "userId", defaultValue = "") String userId,
-			@RequestParam(value = "password", defaultValue = "") String password){
+			@RequestParam(value = "password", defaultValue = "") String password,
+			HttpServletRequest request,
+			HttpServletResponse response){
 		
-		String targetPage = "SearchResultTest";
+		String targetPage = "Login";
+		HttpSession session = request.getSession(true);
 		
 		User user = new User();
 		
-		user.setUserId(userId);
-		user.setPassword(password);
+		try {
+			user.setUserId(new String(userId.getBytes("8859_1"),"UTF-8"));
+			user.setPassword(new String(password.getBytes("8859_1"),"UTF-8"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		
-		if(!user.getUserId().isEmpty() && !user.getPassword().isEmpty())
+		if(!user.getUserId().equals("") && !user.getPassword().equals(""))
 		{
 			MySqlConnection sql = new MySqlConnection();
 			
-			if(!sql.selectUserPasswod(userId).equals(password))
-				targetPage = "Login";
+			if(sql.selectUserPasswod(userId).equals(password))
+			{
+				targetPage = "SearchResult";
+				session.setAttribute("user", user);
+			}
 		}
 		ModelAndView mv = new ModelAndView();
-		
-		mv.addObject("userId", userId);
+
 		mv.setViewName(targetPage);
 		
 		return mv;

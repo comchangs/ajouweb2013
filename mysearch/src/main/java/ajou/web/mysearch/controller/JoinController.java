@@ -36,9 +36,9 @@ public class JoinController {
 		{
 			MySqlConnection sql = new MySqlConnection();
 			
-			if(sql.selectDb("SELECT user_id FROM user WHERE user_id=" + user.getUserId()) == null)
+			if(sql.selectDb("SELECT user_id FROM user WHERE user_id='" + user.getUserId() + "'") == null)
 			{
-				sql.insertDB("INSERT user(user_id, password) VALUES (" + user.getUserId() + "," + user.getPassword() + ")");
+				sql.insertDB("INSERT user(user_id, password) VALUES ('" + user.getUserId() + "','" + user.getPassword() + "')");
 				targetPage = "Login";
 			}
 			else
