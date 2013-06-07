@@ -1,6 +1,7 @@
 package ajou.web.mysearch.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +29,7 @@ public class LoginController {
 		
 		String targetPage = "Login";
 		HttpSession session = request.getSession(true);
+		ArrayList<String> userBookmarkList = null;
 		
 		User user = new User();
 		
@@ -44,14 +46,31 @@ public class LoginController {
 			
 			if(sql.selectUserPasswod(userId).equals(password))
 			{
-				targetPage = "SearchResult";
+				targetPage = "SearchResultTest";
 				session.setAttribute("user", user);
+				userBookmarkList = getUserBookmark(user.getUserId());
 			}
 		}
 		ModelAndView mv = new ModelAndView();
 
+		mv.addObject("userBookmarkList", userBookmarkList);
 		mv.setViewName(targetPage);
 		
 		return mv;
+	}
+	
+	public ArrayList<String> getUserBookmark(String userId)
+	{
+		MySqlConnection sql = new MySqlConnection();
+
+		ArrayList<String> result = sql.selectDb("SELECT url FROM bookmark WHERE userId='"+ userId + "'");
+		
+		if(result == null)
+		{
+			result = new ArrayList<String>();
+			result.add(new String("즐겨찾기 목록이 없습니다."));
+		}
+		
+		return result;
 	}
 }
