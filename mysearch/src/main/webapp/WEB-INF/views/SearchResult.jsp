@@ -108,7 +108,7 @@
 				
 				if("${result.bookmark}" == "true")
 				{
-					var text = "removeBookmark(" + "${searchKeyword}" + "," + "${start}" + "," + "\"${result.url}\"" + ")";
+					var text = "removeBookmark(" + "\"${searchKeyword}\"" + "," + "${start}" + "," + "\"${result.url}\"" + ")";
 					button = document.createElement("button");
 					button.setAttribute("onclick", text);
 					img = document.createElement("img");
@@ -119,7 +119,6 @@
 				}
 				else if("${result.bookmark}" == "false")
 				{
-
 					var text = "addBookmark(" + "\"${searchKeyword}\"" + "," + "${start}" + "," + "\"${result.url}\"" + ")";
 					button = document.createElement("button");
 					button.setAttribute("onclick", text);
