@@ -34,7 +34,7 @@
 	<div id="weather" style="background-color:white"></div>
 	<c:forEach var="bookmarkList" items="${userBookmarkList }">
 		<div id="bookmarkList">
-			${bookmarkList }<br />
+			${bookmarkList.name } :: ${bookmarkList.url }<br />
 		</div>
 	</c:forEach>
 </body>

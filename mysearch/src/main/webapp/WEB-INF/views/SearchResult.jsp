@@ -130,7 +130,8 @@
 				function addBookmark(searchKeyword, start, bookmarkUrl)
 				{
 					var url = "" + "?searchKeyword=" + searchKeyword + "&start=" + start + "" + "&bookmarkUrl=" + bookmarkUrl + "&bookmarkSelect=" + "add";
-					location.href = url; 
+					name = prompt("즐겨찾기 이름을 입력하세요.");
+					location.href = url + "&bookmarkName=" + name;
 				}
 
 				function removeBookmark(searchKeyword, start, bookmarkUrl)
