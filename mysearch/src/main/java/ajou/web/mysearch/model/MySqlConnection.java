@@ -146,7 +146,7 @@ public class MySqlConnection {
 		
 		try {
 			con = getConnection();
-			ps = con.prepareStatement("SELECT password FROM user WHERE user_id=" + userId);
+			ps = con.prepareStatement("SELECT password FROM user WHERE user_id='" + userId + "'");
 			rs = ps.executeQuery();
 			while(rs.next()) {
 				result = rs.getString(1);
