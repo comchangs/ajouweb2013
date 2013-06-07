@@ -66,7 +66,7 @@ public class SearchResultController {
 	private void Bookmark(String userId, String bookmarkUrl, String bookmarkSelect)
 	{
 		if(bookmarkSelect.equals("add"))
-			mySqlCon.insertDB("INSERT bookmark VALUES ('" + userId + "','" + bookmarkUrl + "')");
+			mySqlCon.insertDB("INSERT bookmark(user_id, url) VALUES ('" + userId + "','" + bookmarkUrl + "')");
 		else if(bookmarkSelect.equals("remove"))
 			mySqlCon.insertDB("DELETE FROM bookmark WHERE userId='" + userId + "' AND url='" + bookmarkUrl + "'");
 	}
@@ -99,7 +99,7 @@ public class SearchResultController {
 			e1.printStackTrace();
 		}
 		
-		naverParse(start, bookmarkUrl, bookmarkSelect, searchKeywordNotEncode);
+//		naverParse(start, bookmarkUrl, bookmarkSelect, searchKeywordNotEncode);
 		User user = (User)session.getAttribute("user"); 
 		Bookmark(user.getUserId(), bookmarkUrl, bookmarkSelect);
 		
@@ -135,8 +135,6 @@ public class SearchResultController {
 					// sr.setContent((String) resultBuff.get("content"));
 					resultList[i].setTitle((String) resultBuff.get("title"));
 					resultList[i].setUrl((String) resultBuff.get("url"));
-					
-					resultList[i].setBookmark("false");
 					/*
 					 * sr.setBoost((double) resultBuff.get("boost"));
 					 * sr.setDigest((String) resultBuff.get("digest"));
@@ -149,7 +147,7 @@ public class SearchResultController {
 					 * sr.setVersion((long) resultBuff.get("_version_"));
 					 */
 					
-					if(mySqlCon.getBookmarkUrl(user.getUserId(), bookmarkUrl))
+					if(mySqlCon.getBookmarkUrl(user.getUserId(), resultList[i].getUrl()))
 						resultList[i].setBookmark("true");
 					else
 						resultList[i].setBookmark("false");
