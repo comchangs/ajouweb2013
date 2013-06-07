@@ -50,7 +50,7 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "SearchResultTest";
+		return "Login";
 	}
 	
 	@RequestMapping(value = "/wordcloud", method = RequestMethod.GET)
