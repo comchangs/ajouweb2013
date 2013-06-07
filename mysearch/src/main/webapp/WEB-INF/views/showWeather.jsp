@@ -7,17 +7,25 @@
 <title>Shows weather</title>
 <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <script type="text/javascript">
-var asdf = 'qwer';
 	$(document).ready(function() {
 		$.getJSON('http://smart-ip.net/geoip-json?callback=?', function(ip) {
-			$.getJSON('http://query.yahooapis.com/v1/public/yql?q=select%20forecastList%20from%20json%20where%20url%3D%22http%3A%2F%2Fi.wxbug.net%2FREST%2FDirect%2FGetForecast.ashx%3Fla%3D' + ip.latitude + '%26lo%3D' + ip.longitude + '%26nf%3D1%26units%3D1%26api_key%3Dvxwdyz3evgtvuv9d5e53sckc%26_%3D1370388189457%22&format=json&diagnostics=true&callback=', function(weather) {
-				alert(weather.query.results.json.forecastList.dayDesc);
+			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'http%3A%2F%2Fapi.wxbug.net%2FgetLiveWeatherRSS.aspx%3FACode%3DA5350497592%26lat%3D" + ip.latitude + "%26long%3D" + ip.longitude + "%26unittype%3D1'&format=json&callback=", function(weather) {
+				if(weather.query.results.rss.channel.weather.ob['ob-date'].hour['hour-24'] < 6 || weather.query.results.rss.channel.weather.ob['ob-date'].hour['hour-24'] > 18) {
+					$('body').css("backgroundImage", "url('http://farm5.staticflickr.com/4030/4677344119_73183fbb4f_b.jpg')");
+				} else {
+					$('body').css("backgroundImage", "url('http://farm5.staticflickr.com/4016/4273931840_6c94bd6c0e_b.jpg')");
+				}
+				var imgStr = weather.query.results.rss.channel.weather.ob['current-condition'].icon;
+				$('#weather').append("<img src=http://img.weather.weatherbug.com/forecast/icons/localized/105x88/en/trans/cond" + imgStr.substr(imgStr.length - 7, 3) + ".png>");
+				$('#weather').append(" " + weather.query.results.rss.channel.weather.ob['current-condition'].content + "<br />");
+				$('#weather').append("Temperature: " + weather.query.results.rss.channel.weather.ob.temp.content + "℃<br />");
+				$('#weather').append("Humidity: " + weather.query.results.rss.channel.weather.ob.humidity.content + "%<br />");
 			});
 		});
 	});
 </script>
 </head>
 <body>
-	<div id="weather"></div>
+	<div id="weather" style="background-color:white"></div>
 </body>
 </html>
