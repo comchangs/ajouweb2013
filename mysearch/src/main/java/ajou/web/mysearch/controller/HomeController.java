@@ -84,7 +84,7 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/autocomplete", method = RequestMethod.GET)
-	public String jsonp(Locale locale, Model model, @RequestParam("keyword") String search_keyword) {
+	public String autocomplete(Locale locale, Model model, @RequestParam("keyword") String search_keyword) {
 		logger.info("JSONP", locale);
 		MySqlConnection mysql = new MySqlConnection();
 		ArrayList<String> list = null;
@@ -105,6 +105,13 @@ public class HomeController {
         model.addAttribute("json_data", array.toJSONString() );
 
 		return "autocomplete";
+	}
+	
+	@RequestMapping(value = "/autocomplete_test", method = RequestMethod.GET)
+	public String autocomplete_test(Locale locale, Model model) {
+		logger.info("autocomplete_test", locale);
+
+		return "autocomplete_test";
 	}
 	
 	@RequestMapping(value = "/relation_keyword", method = RequestMethod.GET)

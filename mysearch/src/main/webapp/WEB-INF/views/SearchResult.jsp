@@ -18,6 +18,11 @@
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/SearchResult.css" media="screen"/>
 <script src="${pageContext.request.contextPath}/resources/js/d3.min.js"></script>
 <script src="${pageContext.request.contextPath}/resources/js/d3.layout.cloud.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+  <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/SearchResult.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.paginate.js"></script>
+
 </head>
 <body>
 <div id="wrapper">
@@ -26,9 +31,10 @@
 	<div id="logo" class="container">
 		<h1><a href="#">My Search</a></h1>
 		<form method="get" action="SearchResult">
-				<input type="text" name="searchKeyword" value="${searchKeyword }" />
+				<input type="text" id="searchKeyword" name="searchKeyword" value="${searchKeyword }" />
 				<input type="submit" value="Search"/>
 			</form>
+			
 	</div>
 	<div id="page" class="container">
 		<div id="content">
@@ -46,7 +52,7 @@
   .timeInterval(10)
   .size([w, h])
       .words(data.map(function(d) {
-        return {text: d.relation_keyword, size: 20 + d.count * 5};
+        return {text: d.relation_keyword, size: 20 + d.count * 3};
       }))
       .rotate(function() { return ~~(Math.random() * 6) * 60 * (Math.random()*6); })
       .font("Impact")
@@ -150,9 +156,6 @@
 	<p>© 2013 Ajou Webprogramming - Project team MySearch. All rights reserved.</p>
 </div>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/SearchResult.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-1.3.2.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery.paginate.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			if("${numFound }" > 1)
@@ -177,6 +180,7 @@
 			});
 		});
     </script>
+
 </body>
 </html>
 
