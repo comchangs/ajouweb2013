@@ -28,7 +28,7 @@
 					// Text you want
 					}
 				});
-			$.ajax({
+							$.ajax({
 		        url: '/GetResultJsonData',
 		        type: 'POST',
 		        dataType: 'json',
@@ -36,11 +36,12 @@
 		        success: function (result) {
 		        	alert("!!!!");
 		        	alert(result.searchKeyword);
-	            },
-	            error: function (error) {
-	                alert("error: " + error.responseText);
-	            }
-		    });
+		        },
+		        error: function (error) {
+		            alert("error: " + error.responseText);
+		        }
+		     });
+
 		});
 		
 */
