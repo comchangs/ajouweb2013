@@ -136,4 +136,43 @@ public class MySqlConnection {
 			return null;
 		return result;
 	}
+	
+	public String selectUserPasswod(String userId)
+	{
+		Connection con = null;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		String result = new String();
+		
+		try {
+			con = getConnection();
+			ps = con.prepareStatement("SELECT password FROM user WHERE user_id=" + userId);
+			rs = ps.executeQuery();
+			while(rs.next()) {
+				result = rs.getString(1);
+			}
+		}
+		catch (SQLException e)
+		{
+			e.getStackTrace();
+		}
+		finally
+		{
+			try{
+			if(con != null)
+				con.close();
+			if(rs != null)
+				rs.close();
+			if(ps != null)
+				ps.close();
+			}
+			
+			catch (SQLException e)
+			{
+				e.getStackTrace();
+			}
+		}
+
+		return result;
+	}
 }
