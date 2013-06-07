@@ -137,9 +137,9 @@ public class MySqlConnection {
 		return result;
 	}
 	
-	public boolean getBookmarkUrl(String userId, String bookmarkUrl)
+	public String getBookmarkUrl(String userId, String bookmarkUrl)
 	{
-		Connection con = null;
+ 		Connection con = null;
 		ResultSet rs = null;
 		PreparedStatement ps = null;
 		String result = new String();
@@ -149,10 +149,8 @@ public class MySqlConnection {
 			ps = con.prepareStatement("SELECT user_id FROM bookmark WHERE user_id='" + userId + "' AND url='" + bookmarkUrl + "'");
 			rs = ps.executeQuery();
 			if(rs.next()) {
-				return true;
+				result = rs.getString(1);
 			}
-			else
-				return false;
 		}
 		catch (SQLException e)
 		{
@@ -174,7 +172,7 @@ public class MySqlConnection {
 				e.getStackTrace();
 			}
 		}
-		return false;
+		return result;
 	}
 	
 	public String selectUserPasswod(String userId)

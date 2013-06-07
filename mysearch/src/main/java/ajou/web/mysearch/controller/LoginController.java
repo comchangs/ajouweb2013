@@ -63,7 +63,7 @@ public class LoginController {
 	{
 		MySqlConnection sql = new MySqlConnection();
 
-		ArrayList<String> result = sql.selectDb("SELECT url FROM bookmark WHERE userId='"+ userId + "'");
+		ArrayList<String> result = sql.selectDb("SELECT url FROM bookmark WHERE user_id='"+ userId + "'");
 		
 		if(result == null)
 		{

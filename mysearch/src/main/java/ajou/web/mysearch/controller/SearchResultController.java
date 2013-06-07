@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -65,6 +66,7 @@ public class SearchResultController {
 	
 	private void Bookmark(String userId, String bookmarkUrl, String bookmarkSelect)
 	{
+		
 		if(bookmarkSelect.equals("add"))
 			mySqlCon.insertDB("INSERT bookmark(user_id, url) VALUES ('" + userId + "','" + bookmarkUrl + "')");
 		else if(bookmarkSelect.equals("remove"))
@@ -153,11 +155,15 @@ public class SearchResultController {
 					 * sr.setAnchor(anchorArray.toString());
 					 * sr.setVersion((long) resultBuff.get("_version_"));
 					 */
-					
-					if(mySqlCon.getBookmarkUrl(user.getUserId(), resultList[i].getUrl()))
+
+					if(mySqlCon.getBookmarkUrl(user.getUserId(), URLDecoder.decode(resultList[i].getUrl(), "UTF-8")).equals(user.getUserId()))
+					{
 						resultList[i].setBookmark("true");
+					}
 					else
+					{
 						resultList[i].setBookmark("false");
+					}
 				}
 			} else {
 				resultList[0] = new SearchResult();
