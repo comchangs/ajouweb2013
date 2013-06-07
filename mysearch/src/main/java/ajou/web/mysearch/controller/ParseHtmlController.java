@@ -39,6 +39,7 @@ public class ParseHtmlController {
 		doc = Jsoup.parse(url.openStream(), charset.detect().getName(),
 				urlString);
 
+		searchKeyword = new String(searchKeyword.getBytes("8859_1"),"UTF-8");
 		title = doc.title();
 		if (!doc.select("meta[name=description]").isEmpty()) {
 			description = doc.select("meta[name=description]").get(0)
