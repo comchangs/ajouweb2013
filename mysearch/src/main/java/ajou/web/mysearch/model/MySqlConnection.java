@@ -224,12 +224,12 @@ public class MySqlConnection {
 			ResultSet rs = null;
 			PreparedStatement ps = null;
 			try {
-				String sqlQuery = "SELECT custname FROM custdata WHERE custname LIKE '"+name+"%'";
+				String sqlQuery = "SELECT word FROM dictionary WHERE word LIKE '"+name+"%'";
 				System.out.println(sqlQuery);
 				ps = conn.prepareStatement(sqlQuery);
 				rs = ps.executeQuery();
 				while (rs.next()) {
-					list.add(rs.getString("custname"));
+					list.add(rs.getString("word"));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
