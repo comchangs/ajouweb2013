@@ -124,7 +124,7 @@ public class SearchResultController {
 		
 		if(user == null)
 		{
-			mv.setViewName("Login");
+			mv.setViewName("redirect:/");
 			return mv;
 		}
 
