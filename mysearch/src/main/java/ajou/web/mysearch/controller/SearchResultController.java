@@ -33,6 +33,7 @@ import ajou.web.mysearch.controller.HomeController.Keyword;
 import ajou.web.mysearch.model.SearchResult;
 import ajou.web.mysearch.model.MySqlConnection;
 import ajou.web.mysearch.model.User;
+import ajou.web.mysearch.model.Bookmark;
 
 @Controller
 public class SearchResultController {
@@ -64,17 +65,31 @@ public class SearchResultController {
 		
 	}
 	
-	private void Bookmark(String userId, String bookmarkUrl, String bookmarkSelect, String bookmarkName)
+	private void Bookmark(User user, String bookmarkUrl, String bookmarkSelect, String bookmarkName)
 	{
 		
 		if(bookmarkSelect.equals("add"))
 		{
+			Bookmark bookmark = new Bookmark();
+			bookmark.setName(bookmarkName);
+			bookmark.setUrl(bookmarkUrl);
 			if(bookmarkName.equals(""))
 				bookmarkName = "이름 없음";
-			mySqlCon.insertDB("INSERT bookmark(user_id, url, name) VALUES ('" + userId + "','" + bookmarkUrl + "','" + bookmarkName +  "')");
+			mySqlCon.insertDB("INSERT bookmark(user_id, url, name) VALUES ('" + user.getUserId() + "','" + bookmarkUrl + "','" + bookmarkName +  "')");
+			user.getBookmark().add(bookmark);
 		}
 		else if(bookmarkSelect.equals("remove"))
-			mySqlCon.insertDB("DELETE FROM bookmark WHERE user_id='" + userId + "' AND url='" + bookmarkUrl + "'");
+		{
+			mySqlCon.insertDB("DELETE FROM bookmark WHERE user_id='" + user.getUserId() + "' AND url='" + bookmarkUrl + "'");
+			for(int i = 0; i < user.getBookmark().size(); i++)
+			{
+				if(user.getBookmark().get(i).getUrl().equals(bookmarkUrl))
+				{
+					user.getBookmark().remove(i);
+					break;
+				}
+			}
+		}
 	}
 	
 	@RequestMapping(value = "/SearchResult", method = RequestMethod.GET)
@@ -110,13 +125,13 @@ public class SearchResultController {
 		}
 		
 		naverParse(start, bookmarkUrl, bookmarkSelect, searchKeywordNotEncode);
-		User user = (User)session.getAttribute("user"); 
+		User user = (User)session.getAttribute("user");
 		if(user == null)
 		{
 			mv.setViewName("Login");
 			return mv;
 		}
-		Bookmark(user.getUserId(), bookmarkUrl, bookmarkSelect, bookmarkName);
+		Bookmark(user, bookmarkUrl, bookmarkSelect, bookmarkName);
 		
 		try {//
 			url = new URL(
@@ -162,14 +177,13 @@ public class SearchResultController {
 					 * sr.setVersion((long) resultBuff.get("_version_"));
 					 */
 
-					if(mySqlCon.getBookmarkUrl(user.getUserId(), URLDecoder.decode(resultList[i].getUrl(), "UTF-8")).equals(user.getUserId()))
+					for(int j=0; j < user.getBookmark().size(); j++)
 					{
-						resultList[i].setBookmark("true");
-					}
-					else
-					{
-						resultList[i].setBookmark("false");
-					}
+						if(user.getBookmark().get(j).equals(resultList[i].getUrl()))
+							resultList[i].setBookmark("true");
+						else
+							resultList[i].setBookmark("false");
+					}	
 				}
 			} else {
 				resultList[0] = new SearchResult();

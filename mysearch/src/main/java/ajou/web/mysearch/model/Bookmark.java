@@ -4,6 +4,7 @@ package ajou.web.mysearch.model;
 public class Bookmark{
 	private String url;
 	private String name;
+	
 	public String getUrl() {
 		return url;
 	}
@@ -16,4 +17,5 @@ public class Bookmark{
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 }

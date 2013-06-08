@@ -30,31 +30,39 @@ public class LoginController {
 		
 		String targetPage = "Login";
 		HttpSession session = request.getSession(true);
-		ArrayList<Bookmark> userBookmarkList = null;
+		User user = null;
 		
-		User user = new User();
-		
-		try {
-			user.setUserId(new String(userId.getBytes("8859_1"),"UTF-8"));
-			user.setPassword(new String(password.getBytes("8859_1"),"UTF-8"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		
-		if(!user.getUserId().equals("") && !user.getPassword().equals(""))
+		if((user = (User) session.getAttribute("user")) != null)
 		{
-			MySqlConnection sql = new MySqlConnection();
+			targetPage = "SearchResultTest";
+			if(user.getBookmark().size() > 1)
+				if(user.getBookmark().get(0).getName().equals("북마크 목록이 없습니다."))
+					user.getBookmark().remove(0);
+		}
+		else{
+			user = new User();
+			try {
+				user.setUserId(new String(userId.getBytes("8859_1"),"UTF-8"));
+				user.setPassword(new String(password.getBytes("8859_1"),"UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 			
-			if(sql.selectUserPasswod(userId).equals(password))
+			if(!user.getUserId().equals("") && !user.getPassword().equals(""))
 			{
-				targetPage = "SearchResultTest";
-				session.setAttribute("user", user);
-				userBookmarkList = getUserBookmark(user.getUserId());
+				MySqlConnection sql = new MySqlConnection();
+				
+				if(sql.selectUserPasswod(userId).equals(password))
+				{
+					targetPage = "SearchResultTest";
+					user.setBookmark(getUserBookmark(user.getUserId()));
+					session.setAttribute("user", user);
+				}
 			}
 		}
 		ModelAndView mv = new ModelAndView();
 
-		mv.addObject("userBookmarkList", userBookmarkList);
+		mv.addObject("userBookmarkList", user.getBookmark());
 		mv.setViewName(targetPage);
 		
 		return mv;
