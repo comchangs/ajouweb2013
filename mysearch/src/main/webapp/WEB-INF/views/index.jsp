@@ -148,7 +148,7 @@ function get_current_time(){
 /* 즐겨찾기*/
 function removeBookmark(url)
 {
-	var url = "./removeBookmark" + "?bookmarkUrl=" + url;ㄴ
+	var url = "./removeBookmark" + "?bookmarkUrl=" + url;
 	location.href = url;
 }
 </script>
