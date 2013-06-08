@@ -35,9 +35,7 @@ public class LoginController {
 		if((user = (User) session.getAttribute("user")) != null)
 		{
 			targetPage = "SearchResultTest";
-			if(user.getBookmark().size() > 1)
-				if(user.getBookmark().get(0).getName().equals("북마크 목록이 없습니다."))
-					user.getBookmark().remove(0);
+			user.setBookmark(user.getUserBookmark());
 		}
 		else{
 			user = new User();
@@ -55,7 +53,7 @@ public class LoginController {
 				if(sql.selectUserPasswod(userId).equals(password))
 				{
 					targetPage = "SearchResultTest";
-					user.setBookmark(getUserBookmark(user.getUserId()));
+					user.setBookmark(user.getUserBookmark());
 					session.setAttribute("user", user);
 				}
 			}
@@ -68,21 +66,5 @@ public class LoginController {
 		return mv;
 	}
 	
-	public ArrayList<Bookmark> getUserBookmark(String userId)
-	{
-		MySqlConnection sql = new MySqlConnection();
 
-		ArrayList<Bookmark> result = sql.getBookmark("SELECT url, name FROM bookmark WHERE user_id='"+ userId + "'");
-		if(result.isEmpty())
-		{
-			Bookmark mark = new Bookmark();
-			mark.setName("북마크 목록이 없습니다.");
-			result.add(mark);
-		}
-		else
-			for(int i =0; i < result.size(); i++)
-				result.get(i).setName(result.get(i).getName() + " :: ");
-		
-		return result;
-	}
 }

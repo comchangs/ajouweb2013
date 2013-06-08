@@ -25,4 +25,30 @@ public class User {
 	public void setBookmark(ArrayList<Bookmark> bookmark) {
 		this.bookmark = bookmark;
 	}
+	
+	public ArrayList<Bookmark> getUserBookmark()
+	{
+		MySqlConnection sql = new MySqlConnection();
+
+		ArrayList<Bookmark> result = sql.getBookmark("SELECT url, name FROM bookmark WHERE user_id='"+ this.userId + "'");
+		if(result.isEmpty())
+		{
+			Bookmark mark = new Bookmark();
+			mark.setName("북마크 목록이 없습니다.");
+			mark.setUrl("");
+			result.add(mark);
+		}
+		else
+			for(int i =0; i < result.size(); i++)
+				result.get(i).setName(result.get(i).getName() + " :: ");
+		
+		return result;
+	}
+	
+	public void setUserBookmark(Bookmark addBookmark)
+	{
+		if(bookmark.get(0).getName().equals("북마크 목록이 없습니다."))
+			bookmark.remove(0);
+		bookmark.add(addBookmark);
+	}
 }
