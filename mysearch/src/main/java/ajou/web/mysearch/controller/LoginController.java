@@ -21,14 +21,16 @@ import ajou.web.mysearch.model.Bookmark;
 @Controller
 public class LoginController {
 	
-	@RequestMapping(value = "/Login", method = RequestMethod.POST)
-	public ModelAndView Join(
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView index(
 			@RequestParam(value = "userId", defaultValue = "") String userId,
 			@RequestParam(value = "password", defaultValue = "") String password,
+			@RequestParam(value = "mode", defaultValue = "") String mode,
 			HttpServletRequest request,
 			HttpServletResponse response){
 		
 		String targetPage = "Login";
+		ModelAndView mv = new ModelAndView();
 		HttpSession session = request.getSession(true);
 		User user = null;
 		
@@ -36,8 +38,7 @@ public class LoginController {
 		{
 			targetPage = "SearchResultTest";
 			user.setBookmark(user.getUserBookmark());
-		}
-		else{
+		} else if (mode.equals("login")) {
 			user = new User();
 			try {
 				user.setUserId(new String(userId.getBytes("8859_1"),"UTF-8"));
@@ -55,16 +56,62 @@ public class LoginController {
 					targetPage = "SearchResultTest";
 					user.setBookmark(user.getUserBookmark());
 					session.setAttribute("user", user);
+					mv.addObject("userBookmarkList", user.getBookmark());
 				}
 			}
+		} else if (mode.equals("logout")) {
+			session.setAttribute("user", "");
+			session.invalidate();
+			targetPage = "Login";
 		}
-		ModelAndView mv = new ModelAndView();
 
-		mv.addObject("userBookmarkList", user.getBookmark());
 		mv.setViewName(targetPage);
 		
 		return mv;
 	}
 	
+	@RequestMapping(value = "/", method = RequestMethod.POST)
+	public ModelAndView login(
+			@RequestParam(value = "userId", defaultValue = "") String userId,
+			@RequestParam(value = "password", defaultValue = "") String password,
+			HttpServletRequest request,
+			HttpServletResponse response){
+		
+		String targetPage = "Login";
+		ModelAndView mv = new ModelAndView();
+		HttpSession session = request.getSession(true);
+		User user = null;
+		
+		if((user = (User) session.getAttribute("user")) != null)
+		{
+			targetPage = "SearchResultTest";
+			user.setBookmark(user.getUserBookmark());
+		} else {
+			user = new User();
+			try {
+				user.setUserId(new String(userId.getBytes("8859_1"),"UTF-8"));
+				user.setPassword(new String(password.getBytes("8859_1"),"UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			
+			if(!user.getUserId().equals("") && !user.getPassword().equals(""))
+			{
+				MySqlConnection sql = new MySqlConnection();
+				
+				if(sql.selectUserPasswod(userId).equals(password))
+				{
+					targetPage = "SearchResultTest";
+					user.setBookmark(user.getUserBookmark());
+					session.setAttribute("user", user);
+					mv.addObject("userBookmarkList", user.getBookmark());
+				}
+			}
+		}
+
+		mv.setViewName(targetPage);
+		
+		return mv;
+	}
 
 }

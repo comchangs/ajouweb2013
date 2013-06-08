@@ -17,7 +17,6 @@ import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapreduce.GroupBy;
 import org.springframework.data.mongodb.core.mapreduce.GroupByResults;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,7 +40,8 @@ public class HomeController {
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	
+	//@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 		logger.info("Welcome home! The client locale is {}.", locale);
 		
@@ -76,7 +76,7 @@ public class HomeController {
 	
 	
 	@RequestMapping(value = "/cloud", method = RequestMethod.GET)
-	public String cloud(Locale locale, Model model, @RequestParam("keyword") String search_keyword) {
+	public String cloud(Locale locale, Model model, @RequestParam(value="keyword", defaultValue = "") String search_keyword) {
 		logger.info("Word Cloud!", locale);
 		String json_data = "[ ]";
 		logger.info(search_keyword, locale);
