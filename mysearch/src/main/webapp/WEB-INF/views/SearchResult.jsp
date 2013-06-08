@@ -92,7 +92,7 @@
 	}
 </script>
 <div id="vis"></div>
-				<h2 class="title"><a href="#">검색결과: ${numFound }개</a></h2>
+				<h2 class="title">검색결과: ${numFound }개</h2>
 				<div class="entry">
 				<div id="DivResult">
 					<c:forEach var="result" items="${resultList }">
