@@ -65,6 +65,15 @@ public class LoginController {
 		MySqlConnection sql = new MySqlConnection();
 
 		ArrayList<Bookmark> result = sql.getBookmark("SELECT url, name FROM bookmark WHERE user_id='"+ userId + "'");
+		if(result.isEmpty())
+		{
+			Bookmark mark = new Bookmark();
+			mark.setName("북마크 목록이 없습니다.");
+			result.add(mark);
+		}
+		else
+			for(int i =0; i < result.size(); i++)
+				result.get(i).setName(result.get(i).getName() + " :: ");
 		
 		return result;
 	}

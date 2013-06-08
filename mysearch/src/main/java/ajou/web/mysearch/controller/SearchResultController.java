@@ -69,6 +69,8 @@ public class SearchResultController {
 		
 		if(bookmarkSelect.equals("add"))
 		{
+			if(bookmarkName.equals(""))
+				bookmarkName = "이름 없음";
 			mySqlCon.insertDB("INSERT bookmark(user_id, url, name) VALUES ('" + userId + "','" + bookmarkUrl + "','" + bookmarkName +  "')");
 		}
 		else if(bookmarkSelect.equals("remove"))
@@ -81,7 +83,7 @@ public class SearchResultController {
 			@RequestParam(value = "start", defaultValue = "0") String start,
 			@RequestParam(value = "bookmarkUrl", defaultValue = "null") String bookmarkUrl,
 			@RequestParam(value = "bookmarkSelect", defaultValue = "null") String bookmarkSelect,
-			@RequestParam(value = "bookmarkName", defaultValue = "null") String bookmarkName,
+			@RequestParam(value = "bookmarkName", defaultValue = "") String bookmarkName,
 			HttpServletRequest request,
 			HttpServletResponse response) {
 		/*

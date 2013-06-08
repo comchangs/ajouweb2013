@@ -113,7 +113,7 @@
     <div class="portlet-content">
    		<c:forEach var="bookmarkList" items="${userBookmarkList }">
 			<div id="bookmarkList">
-				${bookmarkList.name } :: ${bookmarkList.url }<br />
+				${bookmarkList.name } ${bookmarkList.url }<br />
 			</div>
 		</c:forEach>
 	</div>

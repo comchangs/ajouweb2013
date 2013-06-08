@@ -131,7 +131,8 @@
 				{
 					var url = "" + "?searchKeyword=" + searchKeyword + "&start=" + start + "" + "&bookmarkUrl=" + bookmarkUrl + "&bookmarkSelect=" + "add";
 					name = prompt("즐겨찾기 이름을 입력하세요.");
-					location.href = url + "&bookmarkName=" + name;
+					if(name != null)
+						location.href = url + "&bookmarkName=" + name;
 				}
 
 				function removeBookmark(searchKeyword, start, bookmarkUrl)
