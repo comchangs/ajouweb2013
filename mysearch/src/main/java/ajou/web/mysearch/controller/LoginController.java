@@ -36,8 +36,9 @@ public class LoginController {
 		
 		if((user = (User) session.getAttribute("user")) != null)
 		{
-			targetPage = "SearchResultTest";
+			targetPage = "index";
 			user.setBookmark(user.getUserBookmark());
+			mv.addObject("userBookmarkList", user.getBookmark());
 		} else if (mode.equals("login")) {
 			user = new User();
 			try {
@@ -53,7 +54,7 @@ public class LoginController {
 				
 				if(sql.selectUserPasswod(userId).equals(password))
 				{
-					targetPage = "SearchResultTest";
+					targetPage = "redirect:/";
 					user.setBookmark(user.getUserBookmark());
 					session.setAttribute("user", user);
 					mv.addObject("userBookmarkList", user.getBookmark());
@@ -62,7 +63,7 @@ public class LoginController {
 		} else if (mode.equals("logout")) {
 			session.setAttribute("user", "");
 			session.invalidate();
-			targetPage = "Login";
+			targetPage = "index";
 		}
 
 		mv.setViewName(targetPage);
@@ -84,8 +85,9 @@ public class LoginController {
 		
 		if((user = (User) session.getAttribute("user")) != null)
 		{
-			targetPage = "SearchResultTest";
+			targetPage = "index";
 			user.setBookmark(user.getUserBookmark());
+			mv.addObject("userBookmarkList", user.getBookmark());
 		} else {
 			user = new User();
 			try {
@@ -101,7 +103,7 @@ public class LoginController {
 				
 				if(sql.selectUserPasswod(userId).equals(password))
 				{
-					targetPage = "SearchResultTest";
+					targetPage = "redirect:/";
 					user.setBookmark(user.getUserBookmark());
 					session.setAttribute("user", user);
 					mv.addObject("userBookmarkList", user.getBookmark());
