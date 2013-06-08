@@ -96,9 +96,9 @@
 				<div id="DivResult">
 					<c:forEach var="result" items="${resultList }">
 				<div id="DivResultList">
-					<a href="parseHtml?keyword=${searchKeyword }&url=${result.url }">${result.title }</a><br />
+					<a href="parseHtml?keyword=${searchKeyword }&url=${result.url }" target="_blank">${result.title }</a><br />
 					${result.content }<br />
-					<a href="parseHtml?keyword=${searchKeyword }&url=${result.url }">${result.url }</a>
+					<a href="parseHtml?keyword=${searchKeyword }&url=${result.url }" target="_blank">${result.url }</a>
 					<div id="DivBookmark${result.index}">
 					</div>
 				</div>
