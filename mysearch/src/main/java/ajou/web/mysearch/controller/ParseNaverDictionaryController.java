@@ -46,7 +46,7 @@ public class ParseNaverDictionaryController implements Runnable{
 //				stringParse.stringSearchMeta(urlParse.toStringMeta());
 				stringParse.stringSearchContent(urlParse.toStringContent());
 				stringParse.createRelationWord();
-				stringParse.insertMongoDB();
+			//	stringParse.insertMongoDB();
 			}
 		}
 	}

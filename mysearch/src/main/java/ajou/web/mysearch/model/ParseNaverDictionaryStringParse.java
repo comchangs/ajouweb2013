@@ -35,20 +35,17 @@ public class ParseNaverDictionaryStringParse {
 		DBDictionary = "dictionary";
 	}
 	
-	public void insertMongoDB()
+	public void insertMongoDB(String relation)
 	{		
-		if(relationWord != null)
+		if(relation != null)
 		{
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 			String[] utcTime = sdf.format(new Date()).split(" ");
 			String timestamp = utcTime[0]+"T"+utcTime[1]+"Z";
 			
-			for(int i = 0; i < relationWord.size(); i ++)
-			{
-				Keywords keywords = new Keywords(keyword, relationWord.get(i), timestamp);
-				mongoOperation.insert(keywords);
-			}
+			Keywords keywords = new Keywords(keyword, relation, timestamp);
+			mongoOperation.insert(keywords);
 		}
 	}
 	
@@ -117,7 +114,10 @@ public class ParseNaverDictionaryStringParse {
 		for(int i = 0; i < resultArray.size(); i++)
 		{
 			if(!resultArray.get(i).equals(keyword))
+			{
 				relationWord.add(new String(resultArray.get(i)));
+				insertMongoDB(resultArray.get(i));
+			}
 		}
 	}
 	
