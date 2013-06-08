@@ -34,7 +34,7 @@ public class User {
 		if(result.isEmpty())
 		{
 			Bookmark mark = new Bookmark();
-			mark.setName("ºÏ¸¶Å© ¸ñ·ÏÀÌ ¾ø½À´Ï´Ù.");
+			mark.setName("ë¶ë§ˆí¬ê°€ ì—†ìŠµë‹ˆë‹¤.");
 			mark.setUrl("");
 			result.add(mark);
 		}
@@ -47,7 +47,7 @@ public class User {
 	
 	public void setUserBookmark(Bookmark addBookmark)
 	{
-		if(bookmark.get(0).getName().equals("ºÏ¸¶Å© ¸ñ·ÏÀÌ ¾ø½À´Ï´Ù."))
+		if(bookmark.get(0).getName().equals("ë¶ë§ˆí¬ê°€ ì—†ìŠµë‹ˆë‹¤."))
 			bookmark.remove(0);
 		bookmark.add(addBookmark);
 	}
