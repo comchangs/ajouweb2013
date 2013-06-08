@@ -24,7 +24,7 @@
 		<div id="content">
 			  
  			<div id="login_box">
-				<form action="./Login" method="post">
+				<form action="./" method="post">
 					<input id="mode" name="mode" type="hidden" value="login" />
 					<label class="block login_label" for="userId">ID</label>
 					<input class="block login_input" id="userId" name="userId" type="text" /><br />
