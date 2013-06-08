@@ -1,10 +1,7 @@
 package ajou.web.mysearch.controller;
 
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import org.json.simple.JSONArray;
@@ -16,7 +13,6 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.mapreduce.GroupBy;
 import org.springframework.data.mongodb.core.mapreduce.GroupByResults;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,70 +33,10 @@ public class HomeController {
 	MongoOperations mongoOperation = (MongoOperations)ctx.getBean("mongoTemplate");
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
-	/**
-	 * Simply selects the home view to render by returning its name.
-	 */
-	
-	//@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
-		
-		return "Login";
-	}
-	
-	@RequestMapping(value = "/wordcloud", method = RequestMethod.GET)
-	public String wordcloud(Locale locale, Model model) {
-		logger.info("Word Cloud!", locale);
-
-		return "d3js";
-	}
-	
-	@RequestMapping(value = "/rank", method = RequestMethod.GET)
-	public String rank(Locale locale, Model model) {
-		logger.info("rank!", locale);
-
-		GroupByResults<Keyword> results = mongoOperation.group("search_keyword",
-                GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
-                Keyword.class);
-		String json_data = results.getRawResults().get("retval").toString();
-		model.addAttribute("json_data", json_data );
-		return "json";
-	}
-	
-	
-	@RequestMapping(value = "/cloud", method = RequestMethod.GET)
-	public String cloud(Locale locale, Model model, @RequestParam(value="keyword", defaultValue = "") String search_keyword) {
-		logger.info("Word Cloud!", locale);
-		String json_data = "[ ]";
-		logger.info(search_keyword, locale);
-		if (search_keyword==null && search_keyword.trim().equals("")) {
-			search_keyword = "";
-		} else {
-			GroupByResults<Keyword> results = null;
-			try {
-				results = mongoOperation.group(where("search_keyword").is(new String(search_keyword.getBytes("8859_1"),"UTF-8")),"keyword",
-				        GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
-				        Keyword.class);
-			} catch (UnsupportedEncodingException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			json_data = results.getRawResults().get("retval").toString();
-			model.addAttribute("json_data", json_data );
-		}
-		return "cloud";
-	}
 	
 	@RequestMapping(value = "/autocomplete", method = RequestMethod.GET)
 	public String autocomplete(Locale locale, Model model, @RequestParam("keyword") String search_keyword) {
-		logger.info("JSONP", locale);
+		logger.info("JSON", locale);
 		MySqlConnection mysql = new MySqlConnection();
 		ArrayList<String> list = null;
 		try {
@@ -122,31 +58,6 @@ public class HomeController {
 		return "autocomplete";
 	}
 	
-	@RequestMapping(value = "/autocomplete_test", method = RequestMethod.GET)
-	public String autocomplete_test(Locale locale, Model model) {
-		logger.info("autocomplete_test", locale);
-
-		return "autocomplete_test";
-	}
-	
-	@RequestMapping(value = "/relation_keyword", method = RequestMethod.GET)
-	public String relation(Locale locale, Model model) {
-		logger.info("relation_keyword", locale);
-
-		//mongoOperation.group("")
-		/*
-		GroupByResults<XObject> results = mongoOperation.group(where("search_keyword").is("man"),"", 
-                GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
-                XObject.class);
-                */
-		GroupByResults<Keyword> results = mongoOperation.group(where("search_keyword").is("in"),"keyword",
-                GroupBy.key("relation_keyword").initialDocument("{ count: 0 }").reduceFunction("function(curr, result) { result.count += 1 }"), 
-                Keyword.class);
-		String json_data = results.getRawResults().get("retval").toString();
-		model.addAttribute("json_data", json_data );
-		
-		return "relation_keyword";
-	}
 	public class Keyword {
 
 		  private String relation_keyword;
