@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -163,7 +164,7 @@ public class SearchResultController {
 							+ " ...");
 					// sr.setContent((String) resultBuff.get("content"));
 					resultList[i].setTitle((String) resultBuff.get("title"));
-					resultList[i].setUrl((String) resultBuff.get("url"));
+					resultList[i].setUrl(URLDecoder.decode((String) resultBuff.get("url"), "UTF-8"));
 					/*
 					 * sr.setBoost((double) resultBuff.get("boost"));
 					 * sr.setDigest((String) resultBuff.get("digest"));
