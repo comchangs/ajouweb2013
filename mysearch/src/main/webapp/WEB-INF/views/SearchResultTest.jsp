@@ -24,12 +24,12 @@
 		$.getJSON('http://smart-ip.net/geoip-json?callback=?', function(ip) {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'http%3A%2F%2Fapi.wxbug.net%2FgetLiveWeatherRSS.aspx%3FACode%3DA5350497592%26lat%3D" + ip.latitude + "%26long%3D" + ip.longitude + "%26unittype%3D1'&format=json&callback=", function(weather) {
 				if(weather.query.results.rss.channel.weather.ob['ob-date'].hour['hour-24'] < 6 || weather.query.results.rss.channel.weather.ob['ob-date'].hour['hour-24'] > 18) {
-					$('body').css("backgroundImage", "url('http://farm9.staticflickr.com/8248/8505945175_1f109030c3_h.jpg')");
+					$('#page').css("backgroundImage", "url('http://farm9.staticflickr.com/8248/8505945175_1f109030c3_h.jpg')");
 				} else {
-					$('body').css("backgroundImage", "url('http://farm8.staticflickr.com/7114/7429037498_a9b383ff2e_h.jpg')");
+					$('#page').css("backgroundImage", "url('http://farm8.staticflickr.com/7114/7429037498_a9b383ff2e_h.jpg')");
 				}
 				var imgStr = weather.query.results.rss.channel.weather.ob['current-condition'].icon;
-				$('#weather').append("<img src=http://img.weather.weatherbug.com/forecast/icons/localized/105x88/en/trans/cond" + imgStr.substr(imgStr.length - 7, 3) + ".png>");
+				$('#weather').append("<img src=http://img.weather.weatherbug.com/forecast/icons/localized/105x88/en/trans/cond" + imgStr.substr(imgStr.length - 7, 3) + ".png><br />");
 				$('#weather').append(" " + weather.query.results.rss.channel.weather.ob['current-condition'].content + "<br />");
 				$('#weather').append("Temperature: " + weather.query.results.rss.channel.weather.ob.temp.content + "℃<br />");
 				$('#weather').append("Humidity: " + weather.query.results.rss.channel.weather.ob.humidity.content + "%<br />");
@@ -85,6 +85,8 @@
   });
  });
  </script>
+ 
+ 
 </head>
 <body>
 <div id="wrapper">
@@ -108,6 +110,54 @@
 	</div>
   </div>
  
+  
+ 
+</div>
+ 
+<div class="column">
+ 
+  <div class="portlet">
+    <div class="portlet-header">Time</div>
+    <div class="portlet-content">
+    <div id="time"></div>
+    <script>
+      window.onload = function(){show_time()};  
+</script>
+<script>
+/* ********** 시계 보여주기 ********** */
+function show_time(){
+     var time = document.getElementById( "time" );
+     // 1000ms 단위로 시간 갱신 시키기
+     window.setInterval("get_current_time()", 1000); 
+     get_current_time();
+}
+
+
+/* ********** 현재 시간 가져오기 ********** */
+function get_current_time(){
+     var time = document.getElementById( "time" );
+     var now = new Date();
+     var week = new Array("Sun","Mon","Tue","Wed","Thu","Fri","Sat");
+
+     var clock = now.getFullYear() + ". ";
+     clock += (now.getMonth() + 1) + ". ";
+     clock += now.getDate() + " ";
+     clock += week[now.getDay()] + " ";
+
+     clock += now.getHours() + ": ";
+     clock += now.getMinutes() + ": ";
+     clock += now.getSeconds() + " ";
+
+     time.innerHTML= clock;
+}
+</script>
+</div>
+  </div>
+ 
+</div>
+ 
+<div class="column">
+ 
   <div class="portlet">
     <div class="portlet-header">Bookmark</div>
     <div class="portlet-content">
@@ -119,28 +169,7 @@
 	</div>
   </div>
  
-</div>
- 
-<div class="column">
- 
-  <div class="portlet">
-    <div class="portlet-header">Shopping</div>
-    <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
-  </div>
- 
-</div>
- 
-<div class="column">
- 
-  <div class="portlet">
-    <div class="portlet-header">Links</div>
-    <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
-  </div>
- 
-  <div class="portlet">
-    <div class="portlet-header">Images</div>
-    <div class="portlet-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit</div>
-  </div>
+  
  
 </div>
 			<div style="clear: both;">&nbsp;</div>
