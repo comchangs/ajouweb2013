@@ -35,8 +35,6 @@ public class ParseHtmlController {
 		String description = null;
 		String keyword = null;
 		Document doc;
-		searchKeyword = new String(searchKeyword.getBytes("8859_1"),"UTF-8");
-		urlString = new String(urlString.getBytes("8859_1"),"UTF-8");
 		int slashslash = urlString.indexOf("//") + 2;
 		String protocol = urlString.substring(0, slashslash);
 		String hostname = urlString.substring(slashslash, urlString.indexOf('/', slashslash));
