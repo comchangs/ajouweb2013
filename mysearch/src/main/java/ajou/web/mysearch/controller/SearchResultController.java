@@ -107,6 +107,8 @@ public class SearchResultController {
 		 * request.getParameter("start");
 		 */
 		HttpSession session = request.getSession(true);
+		User user = null;
+		user = (User) session.getAttribute("user");
 		
 		int startNum = Integer.parseInt(start);
 		String searchKeywordNotEncode = "";
@@ -115,6 +117,12 @@ public class SearchResultController {
 		int numFound = 0;
 		mySqlCon = new MySqlConnection();
 		ModelAndView mv = new ModelAndView();
+		
+		if(user == null)
+		{
+			mv.setViewName("Login");
+			return mv;
+		}
 
 		try {
 			searchKeywordNotEncode = new String(searchKeyword.getBytes("8859_1"),"UTF-8");
@@ -125,12 +133,7 @@ public class SearchResultController {
 		}
 		
 		naverParse(start, bookmarkUrl, bookmarkSelect, searchKeywordNotEncode);
-		User user = (User)session.getAttribute("user");
-		if(user == null)
-		{
-			mv.setViewName("Login");
-			return mv;
-		}
+
 		Bookmark(user, bookmarkUrl, bookmarkSelect, bookmarkName);
 		
 		try {//
