@@ -34,7 +34,12 @@ public class LoginController {
 		HttpSession session = request.getSession(true);
 		User user = null;
 		
-		if((user = (User) session.getAttribute("user")) != null)
+		if (mode.equals("logout")) {
+			session.setAttribute("user", "");
+			session.invalidate();
+			
+			targetPage = "Login";
+		} else if((user = (User) session.getAttribute("user")) != null)
 		{
 			targetPage = "index";
 			user.setBookmark(user.getUserBookmark());
@@ -60,10 +65,6 @@ public class LoginController {
 					mv.addObject("userBookmarkList", user.getBookmark());
 				}
 			}
-		} else if (mode.equals("logout")) {
-			session.setAttribute("user", "");
-			session.invalidate();
-			targetPage = "index";
 		}
 
 		mv.setViewName(targetPage);

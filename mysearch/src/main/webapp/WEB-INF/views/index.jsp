@@ -84,6 +84,7 @@
 <body>
 <div id="wrapper">
 	<div id="menu-wrapper">
+		<div id="logout"><input class="button" type="button" value="Logout" onclick="javascript:location.href='./?mode=logout'" /></div>
 	</div>
 	<div id="logo" class="container">
 		<h1><a href="#">My Search</a></h1>
