@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
@@ -40,7 +41,10 @@ public class ParseHtmlController {
 		String protocol = urlString.substring(0, slashslash);
 		String hostname = urlString.substring(slashslash, urlString.indexOf('/', slashslash));
 		String etc = urlString.substring(protocol.length() + hostname.length() + 1, urlString.length());
-		etc = URLEncoder.encode(etc);
+		boolean bln = Pattern.matches("^[a-zA-Z0-9/.]*$", etc);
+		if(!bln) {
+			etc = URLEncoder.encode(etc);
+		}
 		urlString = protocol + hostname + "/" + etc;
 		URL url = new URL(urlString);
 		CharsetDetector charset = new CharsetDetector();
