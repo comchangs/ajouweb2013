@@ -178,7 +178,7 @@ function get_current_time(){
 
 </div>
 <div id="footer">
-	<p>© 2013 Ajou Webprogramming - Project team MySearch. All rights reserved.</p>
+	<p> ©2013 Ajou Webprogramming - Project team MySearch. All rights reserved.</p>
 </div>
 </body>
 </html>
