@@ -29,7 +29,7 @@
 	<div id="logout"><input class="button logout" type="button" value="Logout" onclick="javascript:location.href='./?mode=logout'" /></div>
 	</div>
 	<div id="logo" class="container">
-		<h1><a href="#">My Search</a></h1>
+		<h1><a href="./">My Search</a></h1>
 		<form method="get" action="SearchResult">
 				<input type="text" id="searchKeyword" name="searchKeyword" value="${searchKeyword }" />
 				<input type="submit" value="Search"/>
