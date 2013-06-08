@@ -144,6 +144,14 @@ function get_current_time(){
 
      time.innerHTML= clock;
 }
+
+/* 즐겨찾기*/
+function removeBookmark(url)
+{
+	var url = "./removeBookmark" + "?bookmarkUrl=" + url;
+	alert(url);
+	location.href = url;
+}
 </script>
 </div>
   </div>
@@ -157,7 +165,10 @@ function get_current_time(){
     <div class="portlet-content">
    		<c:forEach var="bookmarkList" items="${userBookmarkList }">
 			<div id="bookmarkList">
-				${bookmarkList.name } ${bookmarkList.url }<br />
+			<button onclick="javascript:removeBookmark('${bookmarkList.url }');">
+				<img src="${pageContext.request.contextPath}/resources/images/bookmarkOn.png"></img>
+			</button>	
+				${bookmarkList.name } <a href="${bookmarkList.url }" target="_blank">${bookmarkList.url }</a><br />
 			</div>
 		</c:forEach>
 	</div>

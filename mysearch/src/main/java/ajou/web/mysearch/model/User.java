@@ -36,6 +36,7 @@ public class User {
 			Bookmark mark = new Bookmark();
 			mark.setName("북마크가 없습니다.");
 			mark.setUrl("");
+			mark.setTF(false);
 			result.add(mark);
 		}
 		else

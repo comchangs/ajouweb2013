@@ -65,18 +65,18 @@ public class SearchResultController {
 		
 	}
 	
-	private void Bookmark(User user, String bookmarkUrl, String bookmarkSelect, String bookmarkName)
+	private void bookmarkOperation(User user, String bookmarkUrl, String bookmarkSelect, String bookmarkName)
 	{
-		
+		try {
+			bookmarkUrl = new String(bookmarkUrl.getBytes("8859_1"),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		if(bookmarkSelect.equals("add"))
 		{
 			Bookmark bookmark = new Bookmark();
 			bookmark.setName(bookmarkName);
-			try {
-				bookmark.setUrl(new String(bookmarkUrl.getBytes("8859_1"),"UTF-8"));
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			}
+			bookmark.setUrl(bookmarkUrl);
 			if(bookmarkName.equals(""))
 				bookmarkName = "이름 없음";
 			mySqlCon.insertDB("INSERT bookmark(user_id, url, name) VALUES ('" + user.getUserId() + "','" + bookmark.getUrl() + "','" + bookmark.getName() +  "')");
@@ -138,7 +138,7 @@ public class SearchResultController {
 		
 		naverParse(start, bookmarkUrl, bookmarkSelect, searchKeywordNotEncode);
 
-		Bookmark(user, bookmarkUrl, bookmarkSelect, bookmarkName);
+		bookmarkOperation(user, bookmarkUrl, bookmarkSelect, bookmarkName);
 		
 		try {//
 			url = new URL(
@@ -228,5 +228,33 @@ public class SearchResultController {
 		mv.setViewName("SearchResult");
 		
 		return mv;
+	}
+	
+	@RequestMapping(value = "/removeBookmark", method = RequestMethod.GET)
+	public ModelAndView removeBookmark(
+			@RequestParam(value = "bookmarkUrl", defaultValue = "null") String bookmarkUrl,
+			HttpServletRequest request,
+			HttpServletResponse response)
+	{
+		ModelAndView mv = new ModelAndView();
+		
+		HttpSession session = request.getSession(true);
+		User user = null;
+		user = (User) session.getAttribute("user");
+		
+		if(user == null)
+		{
+			mv.setViewName("redirect:/");
+			return mv;
+		}
+		
+		mySqlCon = new MySqlConnection();
+		bookmarkOperation(user, bookmarkUrl, "remove", "");
+		
+		mv.addObject("userBookmarkList", user.getBookmark());
+		mv.setViewName("redirect:/");
+		
+		return mv;
+		
 	}
 }
