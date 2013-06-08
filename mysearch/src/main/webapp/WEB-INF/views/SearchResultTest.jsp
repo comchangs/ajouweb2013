@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -10,15 +12,6 @@
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" charset="utf-8" />
   <script src="http://code.jquery.com/jquery-1.9.1.js" charset="utf-8"></script>
   <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" charset="utf-8"></script>
-  <style charset="utf-8">
-  .column { width: 400px; float: left; padding-bottom: 100px; }
-  .portlet { margin: 0 1em 1em 0; }
-  .portlet-header { margin: 0.3em; padding-bottom: 4px; padding-left: 0.2em; }
-  .portlet-header .ui-icon { float: right; }
-  .portlet-content { padding: 0.4em; }
-  .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
-  .ui-sortable-placeholder * { visibility: hidden; }
-  </style>
   <script type="text/javascript" charset="utf-8">
 	$(document).ready(function() {
 		$.getJSON('http://smart-ip.net/geoip-json?callback=?', function(ip) {
@@ -137,16 +130,16 @@ function show_time(){
 function get_current_time(){
      var time = document.getElementById( "time" );
      var now = new Date();
-     var week = new Array("Sun","Mon","Tue","Wed","Thu","Fri","Sat");
+     var week = new Array("일","월","화","수","목","금","토");
 
-     var clock = now.getFullYear() + ". ";
-     clock += (now.getMonth() + 1) + ". ";
-     clock += now.getDate() + " ";
-     clock += week[now.getDay()] + " ";
+     var clock = now.getFullYear() + "년 ";
+     clock += (now.getMonth() + 1) + "월 ";
+     clock += now.getDate() + "일 ";
+     clock += week[now.getDay()] + "요일 ";
 
-     clock += now.getHours() + ": ";
-     clock += now.getMinutes() + ": ";
-     clock += now.getSeconds() + " ";
+     clock += now.getHours() + "시 ";
+     clock += now.getMinutes() + "분 ";
+     clock += now.getSeconds() + "초 ";
 
      time.innerHTML= clock;
 }
@@ -168,6 +161,7 @@ function get_current_time(){
 		</c:forEach>
 	</div>
   </div>
+  
  
   
  
@@ -178,7 +172,7 @@ function get_current_time(){
 
 </div>
 <div id="footer">
-	<p> ©2013 Ajou Webprogramming - Project team MySearch. All rights reserved.</p>
+	<p>© 2013 Ajou Webprogramming - Project team MySearch. All rights reserved.</p>
 </div>
 </body>
 </html>

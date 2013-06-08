@@ -94,7 +94,7 @@ a:hover {
 	height: 250px;
 }
 
-#logo h1, #logo p, #logo form {
+#logo h1, #logo p {
 	text-align: center;
 }
 
@@ -551,3 +551,38 @@ input {
 	-webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
 
 }
+
+form {
+	text-align: center;
+}
+#login_box {
+	position: relative;
+	width: 200px;
+	margin: 0 auto;
+}
+
+.block {
+	display: block;
+}
+.login_label {
+	background-color:#dddddd;
+	text-align: center;
+	padding: 5px;
+	font-weight:bold;
+}
+.login_input {
+	width: 90%;
+	margin: 5px auto 5px;
+}
+.login_button {
+	width: 90%;
+	margin: 10px auto;
+}
+
+.column { width: 400px; float: left; padding-bottom: 100px; }
+  .portlet { margin: 0 1em 1em 0; }
+  .portlet-header { margin: 0.3em; padding-bottom: 4px; padding-left: 0.2em; }
+  .portlet-header .ui-icon { float: right; }
+  .portlet-content { padding: 0.4em; }
+  .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
+  .ui-sortable-placeholder * { visibility: hidden; }

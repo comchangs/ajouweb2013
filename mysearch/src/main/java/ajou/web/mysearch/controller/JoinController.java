@@ -53,7 +53,7 @@ public class JoinController {
 		return mv;
 	}
 	
-	@RequestMapping(value = "/JoinForm", method = RequestMethod.POST)
+	@RequestMapping(value = "/JoinForm", method = RequestMethod.GET)
 	public ModelAndView JoinForm()
 	{
 		ModelAndView mv = new ModelAndView();
