@@ -2,6 +2,7 @@ package ajou.web.mysearch.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
@@ -33,13 +34,20 @@ public class ParseHtmlController {
 		String description = null;
 		String keyword = null;
 		Document doc;
+		searchKeyword = new String(searchKeyword.getBytes("8859_1"),"UTF-8");
+		urlString = new String(urlString.getBytes("8859_1"),"UTF-8");
+		int slashslash = urlString.indexOf("//") + 2;
+		String protocol = urlString.substring(0, slashslash);
+		String hostname = urlString.substring(slashslash, urlString.indexOf('/', slashslash));
+		String etc = urlString.substring(protocol.length() + hostname.length() + 1, urlString.length());
+		etc = URLEncoder.encode(etc);
+		urlString = protocol + hostname + "/" + etc;
 		URL url = new URL(urlString);
 		CharsetDetector charset = new CharsetDetector();
 		charset.setText(IOUtils.toByteArray(url.openStream()));
 		doc = Jsoup.parse(url.openStream(), charset.detect().getName(),
 				urlString);
 
-		searchKeyword = new String(searchKeyword.getBytes("8859_1"),"UTF-8");
 		title = doc.title();
 		if (!doc.select("meta[name=description]").isEmpty()) {
 			description = doc.select("meta[name=description]").get(0)
@@ -90,7 +98,6 @@ public class ParseHtmlController {
 		
 		
 		// ParseHtml ph = new ParseHtml(searchKeyword, titleArray, descriptionArray, keywordArray);
-
 		return new String("redirect:" + urlString);
 	}
 }
