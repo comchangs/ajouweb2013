@@ -1,5 +1,12 @@
 eclipse.preferences.version=1
 encoding//src/main/java/ajou/web/mysearch/controller/SearchResultController.java=UTF-8
 encoding//src/main/webapp/WEB-INF/views/SearchResultTest.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/autocomplete_test.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/d3js.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/home.jsp=UTF-8
+encoding//src/main/webapp/resources/css/SearchResult.css=UTF-8
+encoding//src/main/webapp/resources/css/SearchResultPaging.css=UTF-8
+encoding//src/main/webapp/resources/css/cloud.css=UTF-8
+encoding//src/main/webapp/resources/css/style.css=UTF-8
 encoding//src/main/webapp/resources/js/cloud.js=UTF-8
+encoding/<project>=UTF-8

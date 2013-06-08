@@ -6,11 +6,11 @@
 <meta name="description" content="" />
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title>My Search</title>
-<link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet" type="text/css" media="screen" />
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-  <style>
+<link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet" type="text/css" media="screen" charset="utf-8" />
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" charset="utf-8" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js" charset="utf-8"></script>
+  <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js" charset="utf-8"></script>
+  <style charset="utf-8">
   .column { width: 400px; float: left; padding-bottom: 100px; }
   .portlet { margin: 0 1em 1em 0; }
   .portlet-header { margin: 0.3em; padding-bottom: 4px; padding-left: 0.2em; }
@@ -19,7 +19,7 @@
   .ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
   .ui-sortable-placeholder * { visibility: hidden; }
   </style>
-  <script type="text/javascript">
+  <script type="text/javascript" charset="utf-8">
 	$(document).ready(function() {
 		$.getJSON('http://smart-ip.net/geoip-json?callback=?', function(ip) {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'http%3A%2F%2Fapi.wxbug.net%2FgetLiveWeatherRSS.aspx%3FACode%3DA5350497592%26lat%3D" + ip.latitude + "%26long%3D" + ip.longitude + "%26unittype%3D1'&format=json&callback=", function(weather) {
@@ -37,7 +37,7 @@
 		});
 	});
 </script>
-  <script>
+  <script charset="utf-8">
   $(function() {
     $( ".column" ).sortable({
       connectWith: ".column"
@@ -58,7 +58,7 @@
     $( ".column" ).disableSelection();
   });
   </script>
-  <script type="text/javascript">
+  <script type="text/javascript" charset="utf-8">
  $(function() {
   $( "#searchKeyword" ).autocomplete({
    minLength: 1,
