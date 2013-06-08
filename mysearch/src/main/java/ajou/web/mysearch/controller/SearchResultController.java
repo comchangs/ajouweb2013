@@ -72,10 +72,14 @@ public class SearchResultController {
 		{
 			Bookmark bookmark = new Bookmark();
 			bookmark.setName(bookmarkName);
-			bookmark.setUrl(bookmarkUrl);
+			try {
+				bookmark.setUrl(new String(bookmarkUrl.getBytes("8859_1"),"UTF-8"));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
 			if(bookmarkName.equals(""))
 				bookmarkName = "이름 없음";
-			mySqlCon.insertDB("INSERT bookmark(user_id, url, name) VALUES ('" + user.getUserId() + "','" + bookmarkUrl + "','" + bookmarkName +  "')");
+			mySqlCon.insertDB("INSERT bookmark(user_id, url, name) VALUES ('" + user.getUserId() + "','" + bookmark.getUrl() + "','" + bookmark.getName() +  "')");
 			user.setUserBookmark(bookmark);
 		}
 		else if(bookmarkSelect.equals("remove"))
