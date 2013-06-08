@@ -17,7 +17,7 @@
 	$(document).ready(function() {
 		$.getJSON('http://smart-ip.net/geoip-json?callback=?', function(ip) {
 			$.getJSON("http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20xml%20where%20url%3D'http%3A%2F%2Fapi.wxbug.net%2FgetLiveWeatherRSS.aspx%3FACode%3DA5350497592%26lat%3D" + ip.latitude + "%26long%3D" + ip.longitude + "%26unittype%3D1'&format=json&callback=", function(weather) {
-				if(d.getHours() < 7 || d.getHours() > 17) {
+				if(d.getHours() < 6 || d.getHours() > 17) {
 					$('#page').css("backgroundImage", "url('http://farm9.staticflickr.com/8248/8505945175_1f109030c3_h.jpg')");
 				} else {
 					$('#page').css("backgroundImage", "url('http://farm8.staticflickr.com/7114/7429037498_a9b383ff2e_h.jpg')");
