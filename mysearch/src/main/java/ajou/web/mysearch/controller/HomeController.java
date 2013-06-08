@@ -175,25 +175,4 @@ public class HomeController {
 		    return "Keyword [relation_keyword=" + relation_keyword + " count = " + count + "]";
 		  }
 		}
-	
-	@RequestMapping(value ="/parseurl", method = RequestMethod.GET)
-	public String parseurl(Locale locale, Model model) {
-		logger.info("Parse Html", locale);
-		
-		return "inputUrlTest";
-	}
-	
-	@RequestMapping(value ="/showweather", method = RequestMethod.GET)
-	public String showweather(Locale locale, Model model) {
-		logger.info("Show weather", locale);
-		
-		return "showWeather";
-	}
-	
-	@RequestMapping(value ="/inputKeywords", method = RequestMethod.GET)
-	public String inputkeywords(Locale locale, Model model) {
-		logger.info("Input related keywords", locale);
-		
-		return "inputRelatedKeywords";
-	}
 }
